@@ -120,6 +120,25 @@ Before EVERY tool call that modifies a file, ask yourself:
 
 > **If you catch yourself about to edit a file without an approved plan, STOP IMMEDIATELY and announce: "⚠️ I almost skipped Plan Mode. Let me plan first."**
 
+### PLAN/APPROVAL PROTOCOL (Non-negotiable)
+
+Before displaying any plan, question, or approval request
+in the CLI, write it to the session file first with a
+timestamp and status `PENDING_APPROVAL`. Update the entry
+to `APPROVED` when approved and `COMPLETE` when done.
+
+Format:
+```markdown
+### [HH:MM] - PENDING_APPROVAL
+[plan text]
+
+### [HH:MM] - APPROVED → IN PROGRESS
+[plan text]
+
+### [HH:MM] - COMPLETE
+[outcome + test results + files changed]
+```
+
 ### Why This Matters
 
 From real-world experience: agents that skip planning break working features, make wrong assumptions, and waste time. The 5 minutes spent planning saves hours of debugging. Tony's rule: **"I refuse to move forward when all features are not humming along perfectly."** Plan Mode prevents the scenario where fixing one thing kills another.
@@ -250,6 +269,14 @@ For algorithmic work:
 - Quantify when possible ("this adds ~200ms latency" not "this might be slower")
 - When stuck, say so and describe what you've tried
 - Don't hide uncertainty behind confident language
+
+### Execution Clarity
+
+- Always say explicitly whether you are waiting for approval or already executing
+- Separate "What I need from Tony" from "What I am doing next"
+- If blocked, state exactly what is blocked and whether it blocks coding, testing, or both
+- When manual action is needed, provide copy-pasteable commands in ordered steps
+- Do not imply a request; state it directly (for example: "I am waiting for Step 2 approval")
 
 ### Change Description
 

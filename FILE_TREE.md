@@ -1,7 +1,7 @@
 # File Tree: managed-rag-api-v1
 
 > **Status:** 🔒 LOCKED
-> **Version:** 1.0
+> **Version:** 1.2
 > **Date:** 2026-03-07
 
 This is the exact folder and file structure Codex must produce.
@@ -29,24 +29,29 @@ managed-rag-api-v1/
 ├── src/
 │   ├── services/
 │   │   ├── __init__.py
+│   │   ├── config_service.py           ← Centralized .env loading (ONLY place os.getenv is called)
+│   │   ├── logging_service.py          ← Centralized logger — all services import from here
 │   │   ├── rag_service.py              ← All File Search API calls live here
 │   │   └── state_service.py            ← projects.json read/write/validate
 │   │
 │   ├── api/
 │   │   ├── __init__.py
+│   │   ├── dependencies.py          ← X-API-Key dependency (optional locally, enforced when configured)
+│   │   ├── health.py                   ← GET /health (Cloud Run readiness probe)
 │   │   ├── projects.py                 ← /projects routes
 │   │   └── docs.py                     ← /projects/{id}/docs + /query routes
 │   │
-│   ├── models/
+│   ├── types/                          ← Pydantic models (Tony's standard: /types not /models)
 │   │   ├── __init__.py
-│   │   ├── project.py                  ← Pydantic models: Project, ProjectCreate
-│   │   └── doc.py                      ← Pydantic models: Doc, QueryRequest, QueryResponse
+│   │   ├── project.py                  ← ProjectCreate, ProjectResponse, ProjectListResponse
+│   │   └── doc.py                      ← DocResponse, QueryRequest, QueryResponse, UploadResponse
 │   │
 │   └── streamlit/
 │       ├── app.py                      ← Streamlit entry point
+│       ├── api_client.py               ← Shared HTTP client — base URL + get/post/delete helpers
 │       ├── components/
 │       │   ├── __init__.py
-│       │   ├── sidebar.py              ← Left pane: project list + new project
+│       │   ├── sidebar.py              ← Left pane: project list + new project dialog
 │       │   └── progress.py             ← Upload pipeline progress display
 │       └── pages/
 │           ├── __init__.py
@@ -56,52 +61,93 @@ managed-rag-api-v1/
 │
 ├── tests/
 │   ├── __init__.py
-│   ├── test_state_service.py           ← Unit tests: projects.json CRUD
-│   ├── test_rag_service.py             ← Unit tests: File Search API calls (mocked)
-│   └── test_api.py                     ← Integration tests: FastAPI endpoints
+│   ├── test_config_service.py          ← Unit tests: env loading + missing key errors
+│   ├── test_state_service.py           ← Unit tests: projects.json CRUD + doc_count derivation
+│   ├── test_rag_service.py             ← Unit tests: File Search API calls (fully mocked)
+│   └── test_api.py                     ← Integration tests: all 9 FastAPI endpoints via httpx
 │
 ├── uploads/                            ← Local staging folder for test docs
 │   └── .gitkeep
 │
-├── main.py                             ← FastAPI app entry point
+├── main.py                             ← FastAPI app entry point (routers only)
 ├── projects.json                       ← State file (committed with empty state)
 ├── .env                                ← NOT committed
 ├── .env.example                        ← Committed — template only
 ├── .gitignore
 ├── requirements.txt
 ├── APP_BRIEF.md
+├── CHANGELOG.md
 ├── DATA_CONTRACT.md
-└── FILE_TREE.md
+├── FILE_TREE.md
+└── UI_SPEC.md
 ```
 
 ---
 
 ## File Responsibilities (What Lives Where)
 
+### `src/services/config_service.py`
+
+The **only** file that calls `os.getenv()` or loads `.env`.
+All other modules import config values from this file.
+
+Responsibilities:
+- Load `.env` via `python-dotenv`
+- Expose typed config values: `GEMINI_API_KEY`, `API_HOST`, `API_PORT`,
+  `MAX_FILE_SIZE_MB`, `UPLOAD_TIMEOUT_SECONDS`, `SUMMARY_REQUIRED`
+- Raise a clear `EnvironmentError` at startup if `GEMINI_API_KEY` is missing
+- Never return `None` for required values — fail loudly at import time
+
+### `src/services/logging_service.py`
+
+The **only** file that configures logging.
+All services import `logger` from this file — never call `logging.getLogger()` directly.
+
+Responsibilities:
+- Configure structured, timestamped logging
+- Log level: `INFO` in normal operation, `DEBUG` when `LOG_LEVEL=debug` in `.env`
+- All log entries include: timestamp, level, module name, message
+- Errors include full exception traceback
+- Never log API keys, file contents, or PII
+
 ### `src/services/rag_service.py`
 
-The ONLY file that imports `google.genai`. All File Search API calls go here.
-No other file touches the Google SDK directly.
+The **only** file that imports `google.genai`.
+All File Search API calls go here — no other file touches the Google SDK directly.
 
 Responsibilities:
 - Create / delete File Search stores
-- Upload documents (async with polling)
+- Upload documents (async with polling — timeout enforced)
 - Generate document summaries via Gemini
-- Delete documents (always force=True)
-- Query stores with the file_search tool
+- Delete documents (always `config={'force': True}`)
+- Query stores with the `file_search` tool
 - Parse grounding metadata into source objects
+- Enforce 90-second timeout on all polling operations
 
 ### `src/services/state_service.py`
 
-The ONLY file that reads/writes `projects.json`.
+The **only** file that reads/writes `projects.json`.
 No other file touches the state file directly.
 
 Responsibilities:
-- Load and validate projects.json on startup
+- Load and validate `projects.json` on startup
 - CRUD operations for projects
 - CRUD operations for docs within projects
 - Atomic writes (read → modify → write)
-- Auto-create projects.json if missing
+- Auto-create `projects.json` if missing
+- Always recalculate `doc_count = len(project["docs"])` after every mutation
+
+### `src/api/health.py`
+
+Single endpoint: `GET /health`
+
+```python
+@router.get("/health")
+def health_check():
+    return {"status": "ok"}
+```
+
+No auth required. No dependencies. Used for Cloud Run readiness probes.
 
 ### `src/api/projects.py`
 
@@ -119,33 +165,49 @@ FastAPI router for:
 - `DELETE /projects/{id}/docs/{doc_id}`
 - `POST /projects/{id}/query`
 
-### `src/models/`
+### `src/types/`
 
 Pydantic v2 models only. No business logic. No API calls. Pure data shapes.
+Import path: `from src.types.project import ProjectCreate`
+Import path: `from src.types.doc import QueryRequest, QueryResponse`
+
+**Note:** This folder is named `types/` — Tony's standard for all data shapes
+and interfaces. Never rename to `models/`.
+
+### `src/streamlit/api_client.py`
+
+Shared HTTP client used by all Streamlit pages.
+Base URL loaded from env: `API_BASE_URL` (default: `http://127.0.0.1:8000`).
+Provides: `get()`, `post()`, `delete()` helpers.
+Handles `ConnectionError` — returns structured error so pages can display
+a consistent "API unreachable" message.
 
 ### `src/streamlit/app.py`
 
-Entry point only. Sets page config, renders sidebar, routes to active page.
-No business logic. No direct API calls (uses `requests` via page components).
+Entry point only. Sets page config, initializes session state, renders sidebar,
+routes to active page via `st.tabs`.
+No business logic. No direct API calls.
 
 ### `src/streamlit/pages/`
 
-Each page component calls FastAPI via `requests` — never imports from `src/services/`.
-This is non-negotiable. The Streamlit layer is a client, not a server.
+Each page component calls FastAPI via `api_client.py` — never imports from `src/services/`.
+This is non-negotiable. Streamlit is a client. Period.
 
 ### `main.py`
 
 ```python
 from fastapi import FastAPI
+from src.api.health import router as health_router
 from src.api.projects import router as projects_router
 from src.api.docs import router as docs_router
 
 app = FastAPI(title="Stark RAG API", version="1.0.0")
+app.include_router(health_router)
 app.include_router(projects_router)
 app.include_router(docs_router)
 ```
 
-Nothing else in main.py.
+Nothing else in `main.py`.
 
 ---
 
@@ -178,8 +240,16 @@ GEMINI_API_KEY=your_key_here
 API_HOST=127.0.0.1
 API_PORT=8000
 
-# Upload limits (optional)
+# Upload configuration (optional)
 MAX_FILE_SIZE_MB=50
+UPLOAD_TIMEOUT_SECONDS=90
+
+# Pipeline behavior (optional)
+# Set to false to fall back to original-only upload if summary generation fails
+SUMMARY_REQUIRED=true
+
+# Logging (optional)
+LOG_LEVEL=info
 ```
 
 ---
@@ -243,10 +313,15 @@ All three commands must work in a clean venv after `pip install -r requirements.
 6. Run `pytest tests/ -v` after every module and confirm pass before moving on.
 7. Write the DATA_CONTRACT shapes exactly — no field additions, no renames.
 8. Always use `force=True` when deleting documents from File Search stores.
-9. Always poll `operation.done` after upload — never assume instant indexing.
+9. Always poll `operation.done` after upload — enforce 90-second timeout.
 10. Keep `main.py` minimal — routers only, nothing else.
+11. All env vars via `config_service.py` — never call `os.getenv()` directly.
+12. All logging via `logging_service.py` — never call `logging.getLogger()` directly.
+13. `doc_count` is always derived: `len(project["docs"])` — never manually set.
+14. `status` must be exactly: `"processing"`, `"indexed"`, or `"failed"` — nothing else.
+15. Folder is `src/types/` — never `src/models/`.
 
 ---
 
 *Part of the Stark Industries AI Factory — managed-rag-api-v1*
-*Version 1.0 | 2026-03-07*
+*Version 1.2 | 2026-03-07*

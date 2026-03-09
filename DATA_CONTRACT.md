@@ -1,7 +1,7 @@
 # Data Contract: managed-rag-api-v1
 
 > **Status:** 🔒 LOCKED
-> **Version:** 1.0
+> **Version:** 1.2
 > **Date:** 2026-03-07
 
 This document defines every data shape in the system. Codex must not deviate from
@@ -27,7 +27,7 @@ file first.
       "description": "string (optional, default: '')",
       "store_id": "string (full resource path: fileSearchStores/name-hash)",
       "created_at": "string (ISO 8601: 2026-03-07T14:31:00Z)",
-      "doc_count": "integer",
+      "doc_count": "integer (DERIVED — always equals len(docs))",
       "docs": {
         "{doc_id}": {
           "id": "string (uuid4)",
@@ -38,7 +38,7 @@ file first.
           "mime_type": "string (application/pdf | text/plain)",
           "store_doc_name": "string (full resource path from File Search API)",
           "summary_doc_name": "string (full resource path of summary doc)",
-          "status": "string (processing | indexed | failed)",
+          "status": "string (enum — see Status Enum below)",
           "uploaded_at": "string (ISO 8601)",
           "error": "string (optional, null if no error)"
         }
@@ -47,6 +47,30 @@ file first.
   }
 }
 ```
+
+### doc_count Rule (Critical)
+
+`doc_count` is a **derived field**. It must never be manually set or incremented.
+
+```python
+# The ONLY correct way to update doc_count:
+project["doc_count"] = len(project["docs"])
+```
+
+`state_service.py` must recalculate `doc_count` after every add or remove operation.
+Any code that manually increments or decrements `doc_count` is a bug.
+
+### Status Enum (Frozen)
+
+`status` must be exactly one of these three values. No other values are permitted:
+
+| Value | Meaning |
+|-------|---------|
+| `"processing"` | Upload in progress — not yet queryable |
+| `"indexed"` | Successfully chunked, embedded, and indexed — ready to query |
+| `"failed"` | Upload or indexing failed — see `error` field for detail |
+
+Codex must not invent new status values (e.g. `"complete"`, `"ready"`, `"done"`).
 
 ### Example
 
@@ -59,7 +83,7 @@ file first.
       "description": "Docs for the Stark Architect Jarvis agent",
       "store_id": "fileSearchStores/architect-agent-wsb9ns3bu5m0",
       "created_at": "2026-03-07T14:31:00Z",
-      "doc_count": 3,
+      "doc_count": 1,
       "docs": {
         "f1e2d3c4-b5a6-7890-fedc-ba0987654321": {
           "id": "f1e2d3c4-b5a6-7890-fedc-ba0987654321",
@@ -102,6 +126,19 @@ If `store_id` is empty string, the project is in an error state — do not attem
 ---
 
 ## 2. API Request / Response Shapes
+
+### GET /health
+
+**Response 200:**
+```json
+{
+  "status": "ok"
+}
+```
+
+No auth required. Used for Cloud Run readiness probes.
+
+---
 
 ### POST /projects — Create Project
 
@@ -181,13 +218,24 @@ then delete the store, then remove from projects.json.
 **Request:** `multipart/form-data`
 - `file`: binary file upload
 - Accepted MIME types: `application/pdf`, `text/plain`
+- Accepted extensions: `.pdf`, `.txt`
+- Both checks must pass — reject mismatches
 - Max file size: 50MB
 
-**Response 200 (streaming status updates via polling):**
+#### Timeout / Safety Valve (Critical)
 
-The endpoint is synchronous but the pipeline is multi-step.
-Return final result only after all steps complete.
+This endpoint blocks while polling Google's async File Search operations.
+Google's API can stall. The Streamlit UI must never hang indefinitely.
 
+Rules:
+- Total timeout budget: **90 seconds** across the full pipeline
+- If any polling loop exceeds its share of the timeout budget, stop immediately
+- Return **HTTP 504** with `{"detail": "Upload timed out. Google API did not respond within 90 seconds."}` 
+- The FastAPI endpoint must implement this via `asyncio.wait_for` or equivalent
+- The Streamlit UI must handle 504 and show: `"Upload timed out. Please try again."`
+- Do NOT let the request hang — a clean timeout error is always better than a frozen UI
+
+**Response 200 (success):**
 ```json
 {
   "doc_id": "string (uuid4)",
@@ -202,8 +250,10 @@ Return final result only after all steps complete.
 ```
 
 **Response 400:** `{"detail": "File type not supported. Accepted: PDF, TXT"}`
+**Response 400:** `{"detail": "Project has reached the 200 document limit."}`
 **Response 404:** `{"detail": "Project not found"}`
 **Response 500:** `{"detail": "Upload failed: {error message}"}`
+**Response 504:** `{"detail": "Upload timed out. Google API did not respond within 90 seconds."}`
 
 ---
 
@@ -219,7 +269,7 @@ Return final result only after all steps complete.
       "display_name": "string",
       "file_size_bytes": "integer",
       "mime_type": "string",
-      "status": "string",
+      "status": "string (processing | indexed | failed)",
       "uploaded_at": "string",
       "error": "string | null"
     }
@@ -243,6 +293,7 @@ Return final result only after all steps complete.
 
 Implementation note: Delete BOTH `store_doc_name` AND `summary_doc_name` from
 the File Search store (force=True on both). Then remove from projects.json.
+Recalculate `doc_count = len(docs)` after removal.
 
 ---
 
@@ -268,9 +319,13 @@ the File Search store (force=True on both). Then remove from projects.json.
     }
   ],
   "model_used": "string",
-  "project_id": "string"
+  "project_id": "string",
+  "latency_ms": "integer (server-side measurement — useful for RAG debugging)"
 }
 ```
+
+`latency_ms` is measured server-side from the moment `generate_content` is called
+to the moment the response is received. Use `time.perf_counter()` for precision.
 
 **Response 400:** `{"detail": "Question cannot be empty"}`
 **Response 404:** `{"detail": "Project not found"}`
@@ -327,13 +382,28 @@ GEMINI_API_KEY=your_google_studio_api_key_here
 API_HOST=127.0.0.1
 API_PORT=8000
 MAX_FILE_SIZE_MB=50
+UPLOAD_TIMEOUT_SECONDS=90
+SUMMARY_REQUIRED=true
 ```
 
 `.env.example` must be committed. `.env` must be in `.gitignore`.
+All env vars must be loaded exclusively via `src/services/config_service.py`.
+No other module may call `os.getenv()` directly.
 
 ---
 
-## 5. Error Response Shape (All Endpoints)
+## 5. Pydantic Types Location
+
+All Pydantic models live in `src/types/`.
+Import path: `from src.types.project import ProjectCreate, ProjectResponse`
+Import path: `from src.types.doc import DocResponse, QueryRequest, QueryResponse`
+
+Note: This is `src/types/` — NOT `src/models/`. Tony's standard is `/types` for all
+data shapes and interfaces.
+
+---
+
+## 6. Error Response Shape (All Endpoints)
 
 All errors use FastAPI's standard HTTPException shape:
 
@@ -344,9 +414,9 @@ All errors use FastAPI's standard HTTPException shape:
 ```
 
 No nested error objects. No stack traces in responses.
-Log full exceptions server-side only.
+Log full exceptions server-side only via `logging_service.py`.
 
 ---
 
 *Part of the Stark Industries AI Factory — managed-rag-api-v1*
-*Version 1.0 | 2026-03-07*
+*Version 1.2 | 2026-03-07*

@@ -1,7 +1,7 @@
 # UI_SPEC: managed-rag-api-v1 Streamlit Dev Rig
 
 > **Status:** 🔒 LOCKED
-> **Version:** 1.0
+> **Version:** 1.2
 > **Date:** 2026-03-07
 > **Audience:** Codex (Engineer Agent)
 > **Replaces:** Designer Agent + Stitch (not needed for dev rig)
@@ -66,6 +66,8 @@ INITIAL_STATE = {
     "upload_status": None,            # None | "uploading" | "summarizing" | "indexing" | "done" | "error"
     "upload_error": None,             # str | None
     "selected_docs": [],              # list of doc_ids selected in corpus manager
+    "corpus_needs_refresh": False,    # bool — set True after upload, triggers corpus reload
+    "api_healthy": None,              # bool | None — result of last /health check
 }
 ```
 
@@ -149,7 +151,8 @@ Show: `st.info("No documents yet. Go to Upload to add your first doc.")`
 - No spinner needed — fast operation
 
 **Auto-refresh:**
-- After any upload completes (triggered via session state flag)
+- Check `st.session_state.corpus_needs_refresh` on render
+- If True: reload docs, set flag back to False
 - Do NOT use `st.rerun()` in a loop — only trigger once after state change
 
 ---
@@ -196,47 +199,44 @@ uploaded_file = st.file_uploader(
 
 Check before calling the API:
 - File type: only `application/pdf` or `text/plain`
+- File extension: only `.pdf` or `.txt`
 - File size: reject if > 50MB, show `st.error("File too large. Max 50MB.")`
 - Project selected: if none, show `st.warning("Select a project first.")`
 
 ### Pipeline Progress Display
 
-When upload starts, show a 4-step progress flow:
+Since the FastAPI endpoint is synchronous (returns only after full pipeline),
+show a single spinner during the HTTP call, then show success or error on return.
 
 ```python
-# Use st.status() for multi-step display
-with st.status("Processing document...", expanded=True) as status:
-    st.write("📤 Uploading file...")
-    # ... after file sent to API ...
-    st.write("🧠 Generating summary...")
-    # ... after summary step ...
-    st.write("📦 Indexing in RAG store...")
-    # ... after indexing complete ...
-    st.write("✅ Done!")
-    status.update(label="Document ready!", state="complete")
-```
-
-**Status labels (exact text):**
-1. `"📤 Uploading file..."`
-2. `"🧠 Generating summary..."`
-3. `"📦 Indexing in RAG store..."`
-4. `"✅ Done! Document is ready to query."`
-
-**Note:** Since the FastAPI endpoint is synchronous (returns only after full pipeline),
-the Streamlit side shows a single spinner during the HTTP call, then updates all steps
-to complete on success. Do not fake step-by-step progress unless the API supports it.
-
-**Actual implementation:**
-```python
-with st.spinner("Processing document — this may take 30-60 seconds..."):
-    response = requests.post(f"{API_BASE}/projects/{project_id}/upload", files=...)
+with st.spinner("Processing document — this may take 30-90 seconds..."):
+    try:
+        response = api_client.post(
+            f"/projects/{project_id}/upload",
+            files={
+                "file": (
+                    uploaded_file.name,
+                    uploaded_file.getvalue(),
+                    uploaded_file.type
+                )
+            }
+        )
+    except ConnectionError:
+        st.error("Cannot reach API. Is the server running on port 8000?")
+        return
 
 if response.status_code == 200:
     st.success("✅ Document indexed and ready to query!")
     st.session_state.corpus_needs_refresh = True
+elif response.status_code == 504:
+    st.error("⏱ Upload timed out. Google API did not respond. Please try again.")
+elif response.status_code == 400:
+    st.error(f"❌ {response.json().get('detail', 'Upload rejected.')}")
 else:
-    st.error(f"Upload failed: {response.json().get('detail', 'Unknown error')}")
+    st.error(f"❌ Upload failed: {response.json().get('detail', 'Unknown error')}")
 ```
+
+**Use `.getvalue()` not `.read()`** on the uploaded file — supports re-reads.
 
 ### Post-Upload
 
@@ -289,26 +289,34 @@ for msg in st.session_state.qa_messages:
 
 # Input
 if prompt := st.chat_input("Ask a question about your documents..."):
-    # Add user message immediately
     st.session_state.qa_messages.append({
         "role": "user",
         "content": prompt,
         "sources": []
     })
 
-    # Call API
     with st.spinner("Searching..."):
-        response = requests.post(
-            f"{API_BASE}/projects/{project_id}/query",
-            json={"question": prompt}
-        )
+        try:
+            response = api_client.post(
+                f"/projects/{project_id}/query",
+                json={"question": prompt}
+            )
+        except ConnectionError:
+            st.session_state.qa_messages.append({
+                "role": "assistant",
+                "content": "❌ Cannot reach API. Is the server running?",
+                "sources": []
+            })
+            st.rerun()
+            return
 
     if response.status_code == 200:
         data = response.json()
         st.session_state.qa_messages.append({
             "role": "assistant",
             "content": data["answer"],
-            "sources": data.get("sources", [])
+            "sources": data.get("sources", []),
+            "latency_ms": data.get("latency_ms")
         })
     else:
         st.session_state.qa_messages.append({
@@ -323,16 +331,23 @@ if prompt := st.chat_input("Ask a question about your documents..."):
 ### Sources Display
 
 ```python
-def render_sources(sources: list):
-    if not sources:
-        return
-    with st.expander(f"📎 {len(sources)} source(s) used", expanded=False):
+def render_sources(sources: list, latency_ms: int = None):
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        label = f"📎 {len(sources)} source(s) used"
+    with col2:
+        if latency_ms is not None:
+            st.caption(f"⏱ {latency_ms}ms")
+
+    with st.expander(label, expanded=False):
         for i, source in enumerate(sources, 1):
             st.markdown(f"**{i}. {source['doc_name']}**")
             if source.get("chunk_text"):
                 st.caption(f'"{source["chunk_text"][:200]}..."')
             st.divider()
 ```
+
+Latency is displayed next to sources — useful for RAG debugging.
 
 ### Behavior Rules
 
@@ -360,7 +375,7 @@ if st.button("Clear Chat", type="secondary"):
 ## 8. New Project Modal
 
 Triggered by "New Project" button in sidebar.
-Use `st.dialog` (Streamlit 1.36+) or fallback to sidebar form.
+Use `st.dialog` (Streamlit 1.36+).
 
 ```python
 @st.dialog("Create New Project")
@@ -384,13 +399,19 @@ def new_project_dialog():
                 st.error("Project name is required.")
             else:
                 with st.spinner("Creating project..."):
-                    response = requests.post(
-                        f"{API_BASE}/projects",
-                        json={"name": name.strip(), "description": description.strip()}
-                    )
+                    try:
+                        response = api_client.post(
+                            "/projects",
+                            json={"name": name.strip(), "description": description.strip()}
+                        )
+                    except ConnectionError:
+                        st.error("Cannot reach API. Is the server running on port 8000?")
+                        return
+
                 if response.status_code == 201:
-                    st.session_state.active_project_id = response.json()["id"]
-                    st.session_state.active_project_name = response.json()["name"]
+                    data = response.json()
+                    st.session_state.active_project_id = data["id"]
+                    st.session_state.active_project_name = data["name"]
                     st.rerun()
                 else:
                     st.error(f"Failed: {response.json().get('detail')}")
@@ -401,28 +422,47 @@ def new_project_dialog():
 
 ---
 
-## 9. API Client Config
+## 9. API Client
 
-All Streamlit pages use a shared base URL from env or default:
+**File:** `src/streamlit/api_client.py`
+
+All Streamlit pages import from this file — never hardcode the base URL.
 
 ```python
-# src/streamlit/api_client.py
 import os
 import requests
+from requests.exceptions import ConnectionError
 
 API_BASE = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
 
-def get(endpoint: str) -> requests.Response:
-    return requests.get(f"{API_BASE}{endpoint}")
+def check_health() -> bool:
+    """Returns True if API is reachable and healthy."""
+    try:
+        response = requests.get(f"{API_BASE}/health", timeout=3)
+        return response.status_code == 200
+    except ConnectionError:
+        return False
+
+def get(endpoint: str, **kwargs) -> requests.Response:
+    return requests.get(f"{API_BASE}{endpoint}", **kwargs)
 
 def post(endpoint: str, **kwargs) -> requests.Response:
     return requests.post(f"{API_BASE}{endpoint}", **kwargs)
 
-def delete(endpoint: str) -> requests.Response:
-    return requests.delete(f"{API_BASE}{endpoint}")
+def delete(endpoint: str, **kwargs) -> requests.Response:
+    return requests.delete(f"{API_BASE}{endpoint}", **kwargs)
 ```
 
-All pages import from `api_client.py` — never hardcode the base URL.
+### API Unreachable Detection
+
+Use `check_health()` at app startup and on any `ConnectionError`.
+Distinguish between:
+- **Server down:** `check_health()` returns False →
+  `st.error("Cannot reach API server. Run: uvicorn main:app --reload")`
+- **Server up, specific call failed:** show endpoint-specific error
+
+This prevents confusing "404 not found" errors when the real problem is the
+server isn't running.
 
 ---
 
@@ -449,68 +489,46 @@ st.sidebar.caption("AI Factory — Layer 3 RAG Manager")
 
 ## 11. Gating Logic (Human Checkpoints)
 
-These are the states where the UI must block and guide the user:
-
 | State | Condition | UI Response |
 |-------|-----------|-------------|
 | No project selected | `active_project_id is None` | `st.info()` on all 3 pages |
 | No docs in project | `doc_count == 0` on Q&A page | `st.warning()` to go upload |
-| Upload in progress | `upload_status == "uploading"` | Disable upload button |
+| Upload in progress | spinner active | Disable upload button |
 | Doc still processing | `status == "processing"` | Show ⏳ badge, disable query |
-| API unreachable | Connection error on any call | `st.error("Cannot reach API. Is the server running?")` |
+| Upload timed out | HTTP 504 from API | `st.error("Upload timed out. Please try again.")` |
+| API unreachable | `ConnectionError` on any call | `st.error()` with run instructions |
+| API healthy check | On app load | `check_health()` — warn if False |
 
 ---
 
-## 12. File Uploader Note for Codex
+## 12. Error Handling (All Pages)
 
-Streamlit's `st.file_uploader` returns a `UploadedFile` object.
-Send it to FastAPI as multipart form data like this:
-
-```python
-files = {
-    "file": (
-        uploaded_file.name,
-        uploaded_file.getvalue(),
-        uploaded_file.type
-    )
-}
-response = requests.post(
-    f"{API_BASE}/projects/{project_id}/upload",
-    files=files
-)
-```
-
-Do NOT use `uploaded_file.read()` — use `.getvalue()` to support re-reads.
-
----
-
-## 13. Error Handling (All Pages)
-
-| Error Type | Display Method |
-|------------|---------------|
-| Validation error | `st.error()` inline near the input |
-| API 404 | `st.warning("Project or document not found.")` |
-| API 500 | `st.error("Server error: {detail}")` |
-| Network error | `st.error("Cannot reach API. Is the server running on port 8000?")` |
-| Empty response | `st.warning("No data returned.")` |
+| Error Type | HTTP Code | Display Method |
+|------------|-----------|---------------|
+| Validation error | 400 | `st.error()` inline near the input |
+| Not found | 404 | `st.warning("Project or document not found.")` |
+| Server error | 500 | `st.error("Server error: {detail}")` |
+| Upload timeout | 504 | `st.error("Upload timed out. Please try again.")` |
+| Network error | N/A | `st.error("Cannot reach API. Run: uvicorn main:app --reload")` |
 
 Never show raw stack traces to the user.
 Always wrap API calls in try/except and handle `requests.exceptions.ConnectionError`.
 
 ---
 
-## 14. Success Definition for UI
+## 13. Success Definition for UI
 
 1. Sidebar shows project list populated from `GET /projects` on load
 2. Creating a project makes it appear in sidebar immediately
-3. Upload flow shows spinner during processing and success message on completion
-4. Corpus Manager shows doc list with correct status badges
-5. Delete with confirmation works and removes doc from list
-6. Q&A page shows multi-turn conversation with sources collapsed under each answer
-7. Switching projects clears Q&A history and refreshes doc list
-8. API unreachable state shows clear error on all pages
+3. Upload flow shows spinner during processing and correct message for each outcome
+4. 504 timeout shows friendly error — UI never hangs
+5. Corpus Manager shows doc list with correct status badges
+6. Delete with confirmation works and removes doc from list
+7. Q&A page shows multi-turn conversation with latency + sources under each answer
+8. Switching projects clears Q&A history and refreshes doc list
+9. API unreachable detected via `/health` — clear error with run instructions shown
 
 ---
 
 *Part of the Stark Industries AI Factory — managed-rag-api-v1*
-*Version 1.0 | 2026-03-07*
+*Version 1.2 | 2026-03-07*

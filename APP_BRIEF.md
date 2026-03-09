@@ -1,7 +1,7 @@
 # 🏭 APP_BRIEF: Managed RAG API + Streamlit Dev Rig
 
 > **Status:** 🔒 LOCKED
-> **Version:** 1.0
+> **Version:** 1.2
 > **Project:** managed-rag-api-v1
 > **Date:** 2026-03-07
 > **Architect:** Tony Stark (Stark Industries AI Factory)
@@ -39,7 +39,7 @@ as the primary source of truth for this SDK.
 | Item | Value |
 |------|-------|
 | Persona | AI Engineer / Developer (Tony Stark only — single user) |
-| Auth | None required (local dev rig) |
+| Auth | X-API-Key header middleware (optional locally, required when deployed) |
 | Environment | macOS / WSL / Linux with Python 3.11+ |
 | API Auth | Google Studio API Key via `.env` (`GEMINI_API_KEY`) |
 | State | `projects.json` at repo root (plain JSON, no database) |
@@ -56,8 +56,10 @@ as the primary source of truth for this SDK.
 | Query Model | Gemini 2.5 Flash |
 | State | `projects.json` (flat JSON file) |
 | Frontend | Streamlit (dev rig only) |
-| Config | `python-dotenv` + `.env` |
+| Config | `python-dotenv` + `.env` via `config_service.py` |
+| Logging | Centralized via `logging_service.py` |
 | Testing | `pytest` (clean venv compatible) |
+| API Security | X-API-Key header middleware |
 
 ---
 
@@ -73,9 +75,13 @@ as the primary source of truth for this SDK.
 ┌─────────────────────────────────────────────────────────────┐
 │                      FASTAPI BACKEND                        │
 │                                                             │
-│  /projects          /projects/{id}/docs                     │
-│  /projects/{id}/upload    /projects/{id}/query              │
-│  /projects/{id}/docs/{doc_id} (DELETE)                      │
+│  GET  /health                                               │
+│  POST /projects          GET  /projects                     │
+│  GET  /projects/{id}     DELETE /projects/{id}              │
+│  POST /projects/{id}/upload                                 │
+│  GET  /projects/{id}/docs                                   │
+│  DELETE /projects/{id}/docs/{doc_id}                        │
+│  POST /projects/{id}/query                                  │
 └─────────────────────────────┬───────────────────────────────┘
                               │
               ┌───────────────┴───────────────┐
@@ -93,28 +99,42 @@ Every action must go through an HTTP call. This is non-negotiable.
 
 ## 7. The Ingestion Pipeline (Auto-Summary Pattern)
 
-Every document upload follows this two-phase pipeline automatically:
+Every document upload follows this two-phase pipeline automatically.
+
+**Fail-fast rule:** If summary generation fails, abort the entire upload.
+Do NOT upload the original document. Return status `"failed"` with error detail.
+The summary is a core part of the indexing strategy — not optional.
+
+> ⚠️ Escape hatch: If Gemini summary generation proves flaky in practice, set
+> `SUMMARY_REQUIRED=false` in `.env` to fall back to original-only upload.
+> Log a warning when fallback is triggered. Default behavior is always fail-fast.
 
 ```
 User drops file
       │
       ▼
+Validate: MIME type AND file extension (.pdf / .txt only)
+      │ fail → return 400 immediately
+      ▼
+Check doc count < 200 (soft limit per project)
+      │ fail → return 400 immediately
+      ▼
 FastAPI receives file bytes
       │
       ▼
 Phase 1: Gemini reads full doc → generates structured summary
-      │        (model: gemini-2.5-flash)
+         (model: gemini-2.5-flash)
+      │ fail → abort entirely, return 500, do NOT proceed to upload
       ▼
-Phase 2: Upload ORIGINAL to File Search store
-      │
+Phase 2: Upload ORIGINAL to File Search store + poll until indexed
+         (timeout: 90 seconds)
+      │ timeout → return 504
       ▼
-Phase 3: Upload SUMMARY to File Search store
-      │
+Phase 3: Upload SUMMARY to File Search store + poll until indexed
+         (timeout: 90 seconds)
+      │ timeout → return 504
       ▼
-Poll until both operations complete (async)
-      │
-      ▼
-Write doc record to projects.json
+Write doc record to projects.json (status: "indexed")
       │
       ▼
 Return success + doc metadata to Streamlit
@@ -130,6 +150,7 @@ is proven from the GHL API docs accuracy experiment.
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
+| `GET` | `/health` | Returns `{"status": "ok"}` — used for Cloud Run readiness |
 | `POST` | `/projects` | Create new agent/project + provision RAG store |
 | `GET` | `/projects` | List all projects |
 | `GET` | `/projects/{id}` | Get single project details |
@@ -141,7 +162,32 @@ is proven from the GHL API docs accuracy experiment.
 
 ---
 
-## 9. Streamlit UI — 3 Pages
+## 9. File Validation Rules
+
+Every upload must pass **both** checks before processing begins:
+
+| Check | Allowed Values |
+|-------|---------------|
+| MIME type | `application/pdf`, `text/plain` |
+| File extension | `.pdf`, `.txt` |
+
+Reject if either check fails — return HTTP 400.
+Reject MIME/extension mismatches (e.g. a `.txt` file with PDF MIME type).
+
+---
+
+## 10. Guardrails
+
+| Guardrail | Rule |
+|-----------|------|
+| Max docs per project | 200 (soft limit) — return HTTP 400 if exceeded |
+| Max file size | 50MB — return HTTP 400 if exceeded |
+| Upload timeout | 90 seconds total — return HTTP 504 if Google API stalls |
+| Summary failure | Abort upload — do not partially ingest |
+
+---
+
+## 11. Streamlit UI — 3 Pages
 
 ### Left Pane (Persistent)
 - New Project button (opens modal/form)
@@ -173,7 +219,7 @@ is proven from the GHL API docs accuracy experiment.
 
 ---
 
-## 10. Scope Locks (Guardrails)
+## 12. Scope Locks (Guardrails)
 
 | ✅ IN SCOPE | 🚫 OUT OF SCOPE |
 |-------------|-----------------|
@@ -187,23 +233,26 @@ is proven from the GHL API docs accuracy experiment.
 | Grounding source display | Streaming responses |
 | Delete doc + delete project | Batch re-indexing |
 | `pytest` unit tests for service layer | Deployment pipelines |
+| X-API-Key middleware | OAuth / JWT auth |
+| Health endpoint | Metrics / observability |
+| Centralized config + logging | Third-party log services |
 
 ---
 
-## 11. File Structure
+## 13. File Structure
 
 See `FILE_TREE.md` for the exact layout Codex must follow.
 
 ---
 
-## 12. State Design
+## 14. State Design
 
 See `DATA_CONTRACT.md` for `projects.json` schema, all API request/response shapes,
 and the summary pipeline contract.
 
 ---
 
-## 13. Reference Material
+## 15. Reference Material
 
 Codex must read these files before writing any File Search API code:
 
@@ -218,35 +267,109 @@ Codex must read these files before writing any File Search API code:
 
 ---
 
-## 14. Success Definition
+## 16. Build Sequence for Codex
 
-1. **Zero Guessing:** All 8 endpoints work without Codex asking for credentials or IDs.
-2. **Pipeline Integrity:** Every upload automatically generates and uploads a summary doc.
-3. **State Integrity:** `projects.json` is the single source of truth — no in-memory magic.
-4. **API-First:** Streamlit never imports backend modules — HTTP only.
-5. **Clean Venv:** `pytest` passes in a fresh virtual environment with no PYTHONPATH hacks.
-6. **Accuracy:** Q&A test page shows grounding sources, proving RAG is working.
+Follow Tony's TDD flow strictly for every module:
+
+```
+Build → Unit Test → Integrate → Block Test → System Test → Finalize
+```
+
+**Do not move to the next step until the current step passes.**
+
+```
+STEP 1 — Project scaffold
+         requirements.txt, .env.example, .gitignore
+         main.py shell, folder structure
+         ✅ Verify: clean install works in fresh venv
+
+STEP 2 — Config + Logging services
+         src/services/config_service.py
+         src/services/logging_service.py
+         ✅ Unit test: config loads all required vars from .env
+         ✅ Unit test: missing GEMINI_API_KEY raises clear error
+         ✅ Verify: pytest passes in clean venv
+
+STEP 3 — State service
+         src/services/state_service.py
+         projects.json CRUD (create, read, update, delete)
+         ✅ Unit test: test_state_service.py — all CRUD operations
+         ✅ Unit test: missing projects.json auto-creates correctly
+         ✅ Unit test: doc_count always equals len(docs)
+         ✅ Verify: pytest passes in clean venv
+
+STEP 4 — RAG service (Google File Search API)
+         src/services/rag_service.py
+         store create/delete, upload + poll, summary gen, query, doc delete
+         ✅ Unit test: test_rag_service.py — all methods mocked
+         ✅ Unit test: upload timeout returns correct error shape
+         ✅ Unit test: summary failure aborts pipeline correctly
+         ✅ Verify: pytest passes in clean venv
+
+STEP 5 — Pydantic types
+         src/types/project.py
+         src/types/doc.py
+         ✅ Unit test: all shapes validate against DATA_CONTRACT.md exactly
+         ✅ Verify: pytest passes in clean venv
+
+STEP 6 — FastAPI routers
+         src/api/health.py
+         src/api/projects.py
+         src/api/docs.py
+         ✅ Integration test: test_api.py — all 9 endpoints with httpx
+         ✅ Block test: full create → upload → list → query → delete flow
+         ✅ Verify: pytest passes in clean venv
+
+STEP 7 — System test (live API)
+         ✅ Run full flow end-to-end against live Google API
+         ✅ Confirm grounding sources returned on query
+         ✅ Confirm doc_count stays in sync after add/delete
+         ✅ Confirm 504 returned on simulated timeout
+
+STEP 8 — Streamlit shell + sidebar
+         src/streamlit/app.py
+         src/streamlit/components/sidebar.py
+         src/streamlit/api_client.py
+         ✅ Manual test: project list loads, new project dialog works
+         ✅ Manual test: API unreachable shows correct error
+
+STEP 9 — Corpus Manager page
+         src/streamlit/pages/corpus_manager.py
+         ✅ Manual test: doc list renders with correct status badges
+         ✅ Manual test: delete with confirm removes doc from list
+
+STEP 10 — Upload page
+          src/streamlit/pages/upload.py
+          src/streamlit/components/progress.py
+          ✅ Manual test: drag-drop → spinner → success → doc in corpus
+          ✅ Manual test: invalid file type shows inline error
+
+STEP 11 — Q&A Test page
+          src/streamlit/pages/qa_test.py
+          ✅ Manual test: multi-turn chat works
+          ✅ Manual test: sources display collapsed under each answer
+          ✅ Manual test: clear chat resets history
+
+STEP 12 — Finalize
+          ✅ Full system test: create project → upload 2 docs → query → delete
+          ✅ All pytest tests pass in clean venv
+          ✅ README.md written with setup + run instructions
+```
 
 ---
 
-## 15. Build Sequence for Codex
+## 17. Success Definition
 
-Follow this order strictly — do not skip phases:
-
-```
-1. Project scaffold + requirements.txt + .env.example
-2. projects.json state manager (read/write/validate)
-3. Google File Search service layer (src/services/rag_service.py)
-4. FastAPI app + all 8 endpoints (src/api/)
-5. pytest tests for service layer
-6. Streamlit app shell + left pane
-7. Corpus Manager page
-8. Upload page + pipeline progress
-9. Q&A Test page + grounding display
-10. Integration test: full upload → query flow
-```
+1. **Zero Guessing:** All 9 endpoints work without Codex asking for credentials or IDs.
+2. **Pipeline Integrity:** Every upload automatically generates and uploads a summary doc.
+3. **Fail Fast:** Failed summary aborts upload — no partial ingestion.
+4. **State Integrity:** `projects.json` is the single source of truth — `doc_count` always equals `len(docs)`.
+5. **API-First:** Streamlit never imports backend modules — HTTP only.
+6. **Clean Venv:** `pytest` passes in a fresh virtual environment with no PYTHONPATH hacks.
+7. **Accuracy:** Q&A test page shows grounding sources, proving RAG is working.
+8. **TDD Enforced:** No module ships without passing its unit tests first.
 
 ---
 
 *Part of the Stark Industries AI Factory — managed-rag-api-v1*
-*Version 1.0 | 2026-03-07*
+*Version 1.2 | 2026-03-07*
