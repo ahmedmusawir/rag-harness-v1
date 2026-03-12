@@ -130,6 +130,18 @@ class StateService:
         self._write_state(state)
         return deepcopy(document)
 
+    def clear_docs(self, project_id: str) -> int:
+        state = self.load_state()
+        project = state["projects"].get(project_id)
+        if project is None:
+            raise ProjectNotFoundError("Project not found")
+
+        removed_count = len(project["docs"])
+        project["docs"] = {}
+        self._recalculate_doc_count(project)
+        self._write_state(state)
+        return removed_count
+
     def _write_state(self, state: dict[str, Any]) -> None:
         validated_state = self._validate_state(state)
         self.state_file.parent.mkdir(parents=True, exist_ok=True)

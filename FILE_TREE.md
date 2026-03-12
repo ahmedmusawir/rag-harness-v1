@@ -36,7 +36,8 @@ managed-rag-api-v1/
 │   │
 │   ├── api/
 │   │   ├── __init__.py
-│   │   ├── dependencies.py          ← X-API-Key dependency (optional locally, enforced when configured)
+│   │   ├── dependencies.py             ← X-API-Key dependency (optional locally, enforced when configured)
+│   │   ├── diagnostics.py              ← Dev diagnostics + cleanup endpoints
 │   │   ├── health.py                   ← GET /health (Cloud Run readiness probe)
 │   │   ├── projects.py                 ← /projects routes
 │   │   └── docs.py                     ← /projects/{id}/docs + /query routes
@@ -55,6 +56,7 @@ managed-rag-api-v1/
 │       │   └── progress.py             ← Upload pipeline progress display
 │       └── pages/
 │           ├── __init__.py
+│           ├── dashboard.py            ← Diagnostics + maintenance dashboard
 │           ├── corpus_manager.py       ← Page 1: doc list + delete
 │           ├── upload.py               ← Page 2: drag-drop + pipeline status
 │           └── qa_test.py              ← Page 3: multi-turn chat + sources
@@ -67,6 +69,8 @@ managed-rag-api-v1/
 │   └── test_api.py                     ← Integration tests: all 9 FastAPI endpoints via httpx
 │
 ├── uploads/                            ← Local staging folder for test docs
+│   └── .gitkeep
+├── logs/                               ← Runtime log directory (committed empty, log files ignored)
 │   └── .gitkeep
 │
 ├── main.py                             ← FastAPI app entry point (routers only)
@@ -165,6 +169,18 @@ FastAPI router for:
 - `DELETE /projects/{id}/docs/{doc_id}`
 - `POST /projects/{id}/query`
 
+### `src/api/diagnostics.py`
+
+FastAPI router for diagnostics and maintenance:
+- `GET /projects/{id}/store/check`
+- `GET /projects/{id}/store/details`
+- `GET /projects/{id}/store/documents`
+- `GET /projects/{id}/store/documents/{document_name}`
+- `GET /stores/verify`
+- `POST /projects/{id}/store/cleanup-preview`
+- `POST /projects/{id}/store/cleanup`
+- `GET /operations/{operation_name}`
+
 ### `src/types/`
 
 Pydantic v2 models only. No business logic. No API calls. Pure data shapes.
@@ -193,6 +209,13 @@ No business logic. No direct API calls.
 Each page component calls FastAPI via `api_client.py` — never imports from `src/services/`.
 This is non-negotiable. Streamlit is a client. Period.
 
+### `logs/`
+
+Root-level runtime logging directory.
+- Commit `logs/.gitkeep`
+- Ignore `logs/*.log`
+- Log format: `timestamp | level | module | message`
+
 ### `main.py`
 
 ```python
@@ -218,13 +241,13 @@ fastapi==0.115.0
 uvicorn==0.30.6
 google-genai==1.55.0
 python-dotenv==1.0.1
-pydantic==2.8.2
+pydantic==2.9.2
 python-multipart==0.0.9
 streamlit==1.39.0
 requests==2.32.3
 pytest==8.3.3
 pytest-asyncio==0.24.0
-httpx==0.27.2
+httpx==0.28.1
 ```
 
 ---

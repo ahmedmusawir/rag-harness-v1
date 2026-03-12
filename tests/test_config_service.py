@@ -45,9 +45,10 @@ def test_loads_required_and_default_settings(monkeypatch: pytest.MonkeyPatch) ->
 
 def test_raises_when_api_key_missing(monkeypatch: pytest.MonkeyPatch) -> None:
     sys.modules.pop(MODULE_NAME, None)
+    monkeypatch.setenv("GEMINI_API_KEY", "")
 
     with pytest.raises(EnvironmentError, match="GEMINI_API_KEY"):
-        reload_config_service(monkeypatch)
+        importlib.import_module(MODULE_NAME)
 
 
 def test_parses_custom_values(monkeypatch: pytest.MonkeyPatch) -> None:

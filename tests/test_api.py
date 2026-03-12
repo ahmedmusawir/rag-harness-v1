@@ -12,6 +12,7 @@ os.environ.setdefault("GEMINI_API_KEY", "test-key")
 
 from main import app
 from src.api import dependencies as dependencies_module
+from src.api import diagnostics as diagnostics_module
 from src.api import docs as docs_module
 from src.api import projects as projects_module
 from src.services.state_service import StateService
@@ -33,9 +34,43 @@ class FakeRagService:
         self.created_names: list[str] = []
         self.deleted_store_names: list[str] = []
         self.deleted_doc_names: list[str] = []
+        self.cleanup_store_calls: list[str] = []
         self.generate_summary_calls: list[dict[str, object]] = []
         self.upload_document_pair_calls: list[dict[str, object]] = []
         self.query_calls: list[dict[str, object]] = []
+        self.document_list_result = [
+            {
+                "name": "fileSearchStores/demo/documents/original",
+                "display_name": "resume",
+            },
+            {
+                "name": "fileSearchStores/demo/documents/summary",
+                "display_name": "resume_SUMMARY",
+            },
+        ]
+        self.store_details_result = {
+            "name": "fileSearchStores/demo",
+            "display_name": "Demo",
+            "raw": {"name": "fileSearchStores/demo", "display_name": "Demo"},
+        }
+        self.document_details_result = {
+            "name": "fileSearchStores/demo/documents/original",
+            "display_name": "resume",
+            "raw": {"name": "fileSearchStores/demo/documents/original", "display_name": "resume"},
+        }
+        self.verify_stores_result = [
+            {
+                "name": "fileSearchStores/demo",
+                "display_name": "Demo",
+                "document_count": 2,
+            }
+        ]
+        self.operation_status_result = {
+            "name": "operations/123",
+            "done": True,
+            "metadata": {"phase": "done"},
+            "error": None,
+        }
         self.raise_on_generate_summary: Exception | None = None
         self.raise_on_upload_pair: Exception | None = None
         self.raise_on_query: Exception | None = None
@@ -49,6 +84,29 @@ class FakeRagService:
 
     def delete_document(self, doc_name: str) -> None:
         self.deleted_doc_names.append(doc_name)
+
+    def list_documents(self, store_name: str) -> list[dict[str, object]]:
+        self.last_list_documents_store = store_name
+        return self.document_list_result
+
+    def get_store_details(self, store_name: str) -> dict[str, object]:
+        self.last_store_details_store = store_name
+        return self.store_details_result
+
+    def get_document_details(self, document_name: str) -> dict[str, object]:
+        self.last_document_details_name = document_name
+        return self.document_details_result
+
+    def verify_stores(self) -> list[dict[str, object]]:
+        return self.verify_stores_result
+
+    def cleanup_store(self, store_name: str) -> list[dict[str, object]]:
+        self.cleanup_store_calls.append(store_name)
+        return self.document_list_result
+
+    def get_operation_status(self, operation_name: str) -> dict[str, object]:
+        self.last_operation_name = operation_name
+        return self.operation_status_result
 
     def generate_summary(self, *, file_bytes: bytes, mime_type: str, **_: object) -> str:
         self.generate_summary_calls.append(
@@ -85,8 +143,10 @@ async def client(
 
     monkeypatch.setattr(projects_module, "state_service", state_service)
     monkeypatch.setattr(docs_module, "state_service", state_service)
+    monkeypatch.setattr(diagnostics_module, "state_service", state_service)
     monkeypatch.setattr(projects_module, "rag_service", rag_service)
     monkeypatch.setattr(docs_module, "rag_service", rag_service)
+    monkeypatch.setattr(diagnostics_module, "rag_service", rag_service)
     monkeypatch.setattr(dependencies_module.config, "API_KEY", "")
     monkeypatch.setattr(docs_module.config, "MAX_FILE_SIZE_MB", 50)
     monkeypatch.setattr(docs_module.config, "UPLOAD_TIMEOUT_SECONDS", 90)
@@ -103,6 +163,7 @@ async def client(
 def api_state() -> SimpleNamespace:
     return SimpleNamespace(
         dependencies=dependencies_module,
+        diagnostics=diagnostics_module,
         docs=docs_module,
         projects=projects_module,
     )
@@ -375,3 +436,160 @@ async def test_query_rejects_blank_question(client: httpx.AsyncClient) -> None:
 
     assert response.status_code == 400
     assert response.json() == {"detail": "Question cannot be empty"}
+
+
+@pytest.mark.asyncio
+async def test_store_check_endpoint_returns_selected_store_state(
+    client: httpx.AsyncClient,
+    api_state: SimpleNamespace,
+) -> None:
+    project_id = await create_project(client)
+
+    response = await client.get(f"/projects/{project_id}/store/check")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "project_id": project_id,
+        "project_name": "Architect Agent",
+        "store_id": "fileSearchStores/demo",
+        "document_count": 2,
+        "documents": api_state.diagnostics.rag_service.document_list_result,
+    }
+
+
+@pytest.mark.asyncio
+async def test_store_details_endpoint_returns_project_and_remote_store_data(
+    client: httpx.AsyncClient,
+) -> None:
+    project_id = await create_project(client)
+
+    response = await client.get(f"/projects/{project_id}/store/details")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["project_id"] == project_id
+    assert body["store_id"] == "fileSearchStores/demo"
+    assert body["store_display_name"] == "Demo"
+
+
+@pytest.mark.asyncio
+async def test_store_document_listing_endpoint_returns_google_docs(
+    client: httpx.AsyncClient,
+    api_state: SimpleNamespace,
+) -> None:
+    project_id = await create_project(client)
+
+    response = await client.get(f"/projects/{project_id}/store/documents")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "project_id": project_id,
+        "store_id": "fileSearchStores/demo",
+        "document_count": 2,
+        "documents": api_state.diagnostics.rag_service.document_list_result,
+    }
+
+
+@pytest.mark.asyncio
+async def test_store_document_details_endpoint_returns_document_payload(
+    client: httpx.AsyncClient,
+    api_state: SimpleNamespace,
+) -> None:
+    project_id = await create_project(client)
+    doc_name = "fileSearchStores/demo/documents/original"
+
+    response = await client.get(f"/projects/{project_id}/store/documents/{doc_name}")
+
+    assert response.status_code == 200
+    assert response.json() == api_state.diagnostics.rag_service.document_details_result
+
+
+@pytest.mark.asyncio
+async def test_verify_stores_endpoint_returns_global_store_listing(
+    client: httpx.AsyncClient,
+    api_state: SimpleNamespace,
+) -> None:
+    response = await client.get("/stores/verify")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "total_stores": 1,
+        "stores": api_state.diagnostics.rag_service.verify_stores_result,
+    }
+
+
+@pytest.mark.asyncio
+async def test_cleanup_preview_returns_project_docs_without_mutation(
+    client: httpx.AsyncClient,
+) -> None:
+    project_id = await create_project(client)
+    await client.post(
+        f"/projects/{project_id}/upload",
+        files={"file": ("resume.txt", b"hello", "text/plain")},
+    )
+
+    response = await client.post(f"/projects/{project_id}/store/cleanup-preview")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["project_id"] == project_id
+    assert body["doc_count"] == 1
+    assert len(body["docs"]) == 1
+
+
+@pytest.mark.asyncio
+async def test_cleanup_requires_explicit_confirmation(client: httpx.AsyncClient) -> None:
+    project_id = await create_project(client)
+
+    response = await client.post(
+        f"/projects/{project_id}/store/cleanup",
+        json={"confirm": True, "confirmation_text": "WRONG"},
+    )
+
+    assert response.status_code == 400
+    assert response.json() == {
+        "detail": "Cleanup requires confirm=true and confirmation_text='EMPTY STORE'."
+    }
+
+
+@pytest.mark.asyncio
+async def test_cleanup_store_clears_project_docs_but_keeps_project_and_store(
+    client: httpx.AsyncClient,
+    api_state: SimpleNamespace,
+) -> None:
+    project_id = await create_project(client)
+    await client.post(
+        f"/projects/{project_id}/upload",
+        files={"file": ("resume.txt", b"hello", "text/plain")},
+    )
+
+    response = await client.post(
+        f"/projects/{project_id}/store/cleanup",
+        json={"confirm": True, "confirmation_text": "EMPTY STORE"},
+    )
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "project_id": project_id,
+        "store_id": "fileSearchStores/demo",
+        "deleted_count": 2,
+        "doc_count": 0,
+        "message": "Store cleaned successfully. The project remains, but the store is now empty.",
+    }
+    assert api_state.diagnostics.rag_service.cleanup_store_calls == ["fileSearchStores/demo"]
+    project = await client.get(f"/projects/{project_id}")
+    assert project.status_code == 200
+    assert project.json()["store_id"] == "fileSearchStores/demo"
+    assert project.json()["doc_count"] == 0
+    assert project.json()["docs"] == {}
+
+
+@pytest.mark.asyncio
+async def test_operation_status_endpoint_returns_payload(
+    client: httpx.AsyncClient,
+    api_state: SimpleNamespace,
+) -> None:
+    response = await client.get("/operations/operations/123")
+
+    assert response.status_code == 200
+    assert response.json() == api_state.diagnostics.rag_service.operation_status_result

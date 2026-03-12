@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 from src.api.dependencies import verify_api_key
 from src.services.config_service import config
+from src.services.logging_service import get_logger
 from src.services.rag_service import (
     RagServiceError,
     RagSummaryError,
@@ -24,6 +25,7 @@ from src.services.state_service import (
 from src.types.doc import QueryRequest, QueryResponse, UploadResponse
 
 router = APIRouter(dependencies=[Depends(verify_api_key)])
+logger = get_logger(__name__)
 
 ALLOWED_TYPES = {
     ".pdf": "application/pdf",
@@ -111,6 +113,12 @@ async def upload_document(project_id: str, file: UploadFile = File(...)) -> dict
 
     file_bytes = await file.read()
     display_name = _validate_upload(file, file_bytes, project)
+    logger.info(
+        "upload started project_id=%s filename=%s mime_type=%s",
+        project_id,
+        file.filename or "",
+        file.content_type or "",
+    )
 
     doc_id = str(uuid4())
     upload_path = _write_upload_file(doc_id, file.filename or "upload", file_bytes)
@@ -126,20 +134,25 @@ async def upload_document(project_id: str, file: UploadFile = File(...)) -> dict
             display_name=display_name,
         )
     except asyncio.TimeoutError as exc:
+        logger.exception("upload timed out project_id=%s display_name=%s", project_id, display_name)
         raise HTTPException(
             status_code=504,
             detail="Upload timed out. Google API did not respond within 90 seconds.",
         ) from exc
     except RagUploadTimeoutError as exc:
+        logger.exception("upload timed out project_id=%s display_name=%s", project_id, display_name)
         raise HTTPException(
             status_code=504,
             detail="Upload timed out. Google API did not respond within 90 seconds.",
         ) from exc
     except RagSummaryError as exc:
+        logger.exception("summary generation failed project_id=%s display_name=%s", project_id, display_name)
         raise HTTPException(status_code=500, detail=f"Upload failed: {exc}") from exc
     except RagServiceError as exc:
+        logger.exception("upload failed project_id=%s display_name=%s", project_id, display_name)
         raise HTTPException(status_code=500, detail=f"Upload failed: {exc}") from exc
     except Exception as exc:
+        logger.exception("upload failed project_id=%s display_name=%s", project_id, display_name)
         raise HTTPException(status_code=500, detail=f"Upload failed: {exc}") from exc
 
     uploaded_at = _utc_now_iso()
@@ -157,6 +170,13 @@ async def upload_document(project_id: str, file: UploadFile = File(...)) -> dict
         "error": None,
     }
     state_service.upsert_doc(project_id, document)
+    logger.info(
+        "upload completed project_id=%s doc_id=%s store_doc=%s summary_doc=%s",
+        project_id,
+        doc_id,
+        upload_result["store_doc_name"],
+        upload_result["summary_doc_name"],
+    )
     return {
         "doc_id": doc_id,
         "original_name": document["original_name"],
@@ -191,10 +211,13 @@ async def delete_document(project_id: str, doc_id: str) -> dict[str, str]:
             rag_service.delete_document(document["summary_doc_name"])
         state_service.delete_doc(project_id, doc_id)
     except RagServiceError as exc:
+        logger.exception("document delete failed project_id=%s doc_id=%s", project_id, doc_id)
         raise HTTPException(status_code=500, detail=str(exc)) from exc
     except Exception as exc:
+        logger.exception("document delete failed project_id=%s doc_id=%s", project_id, doc_id)
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 
+    logger.warning("document deleted project_id=%s doc_id=%s", project_id, doc_id)
     return {"message": "Document deleted successfully", "doc_id": doc_id}
 
 
@@ -216,10 +239,13 @@ async def query_project(project_id: str, payload: QueryRequest) -> dict[str, obj
             model=payload.model,
         )
     except RagServiceError as exc:
+        logger.exception("query failed project_id=%s model=%s", project_id, payload.model)
         raise HTTPException(status_code=500, detail=f"Query failed: {exc}") from exc
     except Exception as exc:
+        logger.exception("query failed project_id=%s model=%s", project_id, payload.model)
         raise HTTPException(status_code=500, detail=f"Query failed: {exc}") from exc
     latency_ms = int((time.perf_counter() - start) * 1000)
+    logger.info("query completed project_id=%s model=%s latency_ms=%s", project_id, payload.model, latency_ms)
 
     sources = [
         {

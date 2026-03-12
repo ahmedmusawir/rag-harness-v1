@@ -297,13 +297,163 @@ Recalculate `doc_count = len(docs)` after removal.
 
 ---
 
+### GET /projects/{id}/store/check
+
+**Response 200:**
+```json
+{
+  "project_id": "string",
+  "project_name": "string",
+  "store_id": "string",
+  "document_count": 2,
+  "documents": [
+    {
+      "name": "string",
+      "display_name": "string"
+    }
+  ]
+}
+```
+
+---
+
+### GET /projects/{id}/store/details
+
+**Response 200:**
+```json
+{
+  "project_id": "string",
+  "project_name": "string",
+  "store_id": "string",
+  "store_display_name": "string",
+  "doc_count": 2,
+  "raw": {}
+}
+```
+
+---
+
+### GET /projects/{id}/store/documents
+
+**Response 200:**
+```json
+{
+  "project_id": "string",
+  "store_id": "string",
+  "document_count": 2,
+  "documents": [
+    {
+      "name": "string",
+      "display_name": "string"
+    }
+  ]
+}
+```
+
+---
+
+### GET /projects/{id}/store/documents/{document_name} — Get Document Details
+
+**Response 200:**
+```json
+{
+  "name": "string",
+  "display_name": "string",
+  "raw": {}
+}
+```
+
+---
+
+### GET /stores/verify
+
+**Response 200:**
+```json
+{
+  "total_stores": 1,
+  "stores": [
+    {
+      "name": "string",
+      "display_name": "string",
+      "document_count": 2
+    }
+  ]
+}
+```
+
+---
+
+### POST /projects/{id}/store/cleanup-preview
+
+**Response 200:**
+```json
+{
+  "project_id": "string",
+  "project_name": "string",
+  "store_id": "string",
+  "doc_count": 2,
+  "docs": [],
+  "warning": "string"
+}
+```
+
+---
+
+### POST /projects/{id}/store/cleanup
+
+**Request Body:**
+```json
+{
+  "confirm": true,
+  "confirmation_text": "EMPTY STORE"
+}
+```
+
+**Locked Behavior (Non-Negotiable):**
+- Delete all documents from the Google store (`force=True`)
+- Clear all docs from that project in `projects.json`
+- Recalculate `doc_count = 0`
+- Keep the project record intact
+- Keep the store intact
+- Never delete the project
+- Never delete the store
+
+**Response 200:**
+```json
+{
+  "project_id": "string",
+  "store_id": "string",
+  "deleted_count": 2,
+  "doc_count": 0,
+  "message": "string"
+}
+```
+
+**Response 400:** `{"detail": "Cleanup requires confirm=true and confirmation_text='EMPTY STORE'."}`
+
+---
+
+### GET /operations/{operation_name}
+
+**Response 200:**
+```json
+{
+  "name": "string",
+  "done": true,
+  "metadata": {},
+  "error": null
+}
+```
+
+---
+
 ### POST /projects/{id}/query — Query RAG Store
 
 **Request Body:**
 ```json
 {
   "question": "string (required, 1-2000 chars)",
-  "model": "string (optional, default: 'gemini-2.5-flash')"
+  "model": "string (optional, default: 'gemini-2.5-pro')"
 }
 ```
 

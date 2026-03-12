@@ -1,3 +1,40 @@
 {
-  "projects": {}
+  "projects": {
+    "22c873e2-fb55-4d8f-b525-0a45d732fc4d": {
+      "id": "22c873e2-fb55-4d8f-b525-0a45d732fc4d",
+      "name": "My Resume",
+      "description": "This is for testing the rig",
+      "store_id": "fileSearchStores/my-resume-gdj8nlz0m8k4",
+      "created_at": "2026-03-09T08:17:59Z",
+      "doc_count": 2,
+      "docs": {
+        "5543b235-87a8-4bc8-ad31-b76714e48caf": {
+          "id": "5543b235-87a8-4bc8-ad31-b76714e48caf",
+          "project_id": "22c873e2-fb55-4d8f-b525-0a45d732fc4d",
+          "original_name": "CV_Ahmed_Rahat_Musawir.pdf",
+          "display_name": "CV_Ahmed_Rahat_Musawir",
+          "file_size_bytes": 79739,
+          "mime_type": "application/pdf",
+          "store_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/cvahmedrahatmusawir-enqlyvh0lma2",
+          "summary_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/cvahmedrahatmusawirsummary-9kya1qnttfyc",
+          "status": "indexed",
+          "uploaded_at": "2026-03-09T08:19:57Z",
+          "error": null
+        },
+        "8dab7eb3-7dc1-4a74-95f2-a6e6a097fdc0": {
+          "id": "8dab7eb3-7dc1-4a74-95f2-a6e6a097fdc0",
+          "project_id": "22c873e2-fb55-4d8f-b525-0a45d732fc4d",
+          "original_name": "GENERAL TONY STARK PROMPT W MY STYLE.txt",
+          "display_name": "GENERAL TONY STARK PROMPT W MY STYLE",
+          "file_size_bytes": 3583,
+          "mime_type": "text/plain",
+          "store_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/general-tony-stark-prompt-w-mkx9gkxgstm7",
+          "summary_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/general-tony-stark-prompt-w-1vpz9dq46f3u",
+          "status": "indexed",
+          "uploaded_at": "2026-03-09T08:53:24Z",
+          "error": null
+        }
+      }
+    }
+  }
 }

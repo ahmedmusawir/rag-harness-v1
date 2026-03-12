@@ -12,7 +12,7 @@ from src.services.config_service import (
     SUMMARY_REQUIRED,
     UPLOAD_TIMEOUT_SECONDS,
 )
-from src.services.logging_service import logger
+from src.services.logging_service import get_logger
 
 SUMMARY_PROMPT = """
 Analyze this document and create a STRUCTURED SUMMARY:
@@ -36,6 +36,8 @@ Analyze this document and create a STRUCTURED SUMMARY:
 Be EXHAUSTIVE. This summary will be uploaded beside the original
 document to improve retrieval for counting, listing, and aggregation questions.
 """.strip()
+
+logger = get_logger(__name__)
 
 
 class RagServiceError(Exception):
@@ -64,6 +66,7 @@ class RagService:
         store = self.client.file_search_stores.create(
             config={"display_name": display_name}
         )
+        logger.info("created store display_name=%s store_id=%s", display_name, store.name)
         return {
             "name": store.name,
             "display_name": getattr(store, "display_name", display_name),
@@ -71,6 +74,7 @@ class RagService:
 
     def delete_store(self, store_name: str) -> None:
         self.client.file_search_stores.delete(name=store_name)
+        logger.info("deleted store store_id=%s", store_name)
 
     def list_documents(self, store_name: str) -> list[dict[str, str]]:
         documents = list(self.client.file_search_stores.documents.list(parent=store_name))
@@ -81,6 +85,46 @@ class RagService:
             }
             for doc in documents
         ]
+
+    def get_store_details(self, store_name: str) -> dict[str, Any]:
+        store = self.client.file_search_stores.get(name=store_name)
+        return {
+            "name": getattr(store, "name", store_name),
+            "display_name": getattr(store, "display_name", ""),
+            "raw": self._to_jsonable(store),
+        }
+
+    def verify_stores(self) -> list[dict[str, Any]]:
+        stores = list(self.client.file_search_stores.list())
+        verified: list[dict[str, Any]] = []
+        for store in stores:
+            documents = list(self.client.file_search_stores.documents.list(parent=store.name))
+            verified.append(
+                {
+                    "name": getattr(store, "name", ""),
+                    "display_name": getattr(store, "display_name", ""),
+                    "document_count": len(documents),
+                }
+            )
+        return verified
+
+    def get_document_details(self, document_name: str) -> dict[str, Any]:
+        document = self.client.file_search_stores.documents.get(name=document_name)
+        return {
+            "name": getattr(document, "name", document_name),
+            "display_name": getattr(document, "display_name", ""),
+            "raw": self._to_jsonable(document),
+        }
+
+    def get_operation_status(self, operation_name: str) -> dict[str, Any]:
+        operation = types.UploadToFileSearchStoreOperation(name=operation_name)
+        refreshed = self.client.operations.get(operation)
+        return {
+            "name": getattr(refreshed, "name", operation_name),
+            "done": getattr(refreshed, "done", None),
+            "metadata": self._to_jsonable(getattr(refreshed, "metadata", None)),
+            "error": self._to_jsonable(getattr(refreshed, "error", None)),
+        }
 
     def generate_summary(
         self,
@@ -97,6 +141,7 @@ class RagService:
                 prompt,
             ],
         )
+        logger.info("generated summary mime_type=%s model=%s", mime_type, model)
         return response.text
 
     def upload_document_pair(
@@ -141,11 +186,23 @@ class RagService:
             "summary_doc_name": summary_doc_name,
         }
 
+    def cleanup_store(self, store_name: str) -> list[dict[str, str]]:
+        documents = self.list_documents(store_name)
+        for document in documents:
+            self.delete_document(document["name"])
+        logger.warning(
+            "cleanup store executed store_id=%s deleted_count=%s",
+            store_name,
+            len(documents),
+        )
+        return documents
+
     def delete_document(self, doc_name: str) -> None:
         self.client.file_search_stores.documents.delete(
             name=doc_name,
             config={"force": True},
         )
+        logger.info("deleted document resource_name=%s", doc_name)
 
     def query_store(
         self,
@@ -167,6 +224,7 @@ class RagService:
                 ]
             ),
         )
+        logger.info("query executed store_id=%s model=%s", store_name, model)
         return {
             "answer": response.text,
             "sources": self._parse_grounding_metadata(response),
@@ -251,6 +309,23 @@ class RagService:
                 }
             )
         return sources
+
+    def _to_jsonable(self, value: Any) -> Any:
+        if value is None or isinstance(value, (str, int, float, bool)):
+            return value
+        if isinstance(value, list):
+            return [self._to_jsonable(item) for item in value]
+        if isinstance(value, dict):
+            return {str(key): self._to_jsonable(item) for key, item in value.items()}
+        if hasattr(value, "model_dump"):
+            return self._to_jsonable(value.model_dump())
+        if hasattr(value, "__dict__"):
+            return {
+                key: self._to_jsonable(item)
+                for key, item in vars(value).items()
+                if not key.startswith("_")
+            }
+        return str(value)
 
 
 rag_service = RagService()

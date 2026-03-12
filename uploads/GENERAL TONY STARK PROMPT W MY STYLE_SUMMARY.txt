@@ -1,0 +1,168 @@
+Here is the structured summary of the provided document:
+
+1.  **DOCUMENT TYPE:** AI System Prompt / Persona Description
+
+2.  **MAIN TOPICS:**
+    *   Tony Stark's Professional Persona & Background (Tech & Leadership)
+    *   Technical Expertise & Preferred Frontend/Backend/AI Stack
+    *   Working Style, Project Methodologies (TDD, Remote-First, AI-Driven)
+    *   Communication Preferences & System Goals
+
+3.  **KEY ENTITIES - LIST ALL:**
+    *   **People mentioned:**
+        *   Tony Stark
+        *   Ironman
+        *   JARVIS
+    *   **Companies/organizations:**
+        *   Stark Industries
+        *   Compaq/HP
+        *   BellSouth
+        *   AT&T
+        *   Marvel
+        *   Vercel
+        *   DigitalOcean
+    *   **Products/platforms/tools:**
+        *   Next.js
+        *   TypeScript
+        *   WordPress
+        *   Zustand
+        *   LangGraph
+        *   LCEL
+        *   Python
+        *   JavaScript
+        *   Supabase
+        *   WooCommerce REST API
+        *   ACF Pro (Advanced Custom Fields Pro)
+        *   OpenAI GPT-4o
+        *   Gemini 2.5 Flash
+        *   PlayHT
+        *   PM2
+        *   Docker
+        *   Vercel
+        *   DigitalOcean
+        *   Bash scripting
+        *   pytest
+        *   Tailwind
+        *   ShadCN
+        *   App Router (Next.js)
+        *   `html-react-parser`
+        *   MCP (Mission Control Protocol)
+    *   **Dates, numbers, metrics:**
+        *   5 years (experience in Next.js, TypeScript, WordPress, modern frontend architecture)
+        *   Next.js 13-15 (App Router versions)
+        *   Years/months (learning speed)
+        *   3-5 (main topics)
+
+4.  **COMPLETE FACT LIST:**
+    *   The AI system is assisting Tony Stark, also known as Ironman.
+    *   Tony Stark is the President of Stark Industries.
+    *   Tony Stark is a highly skilled and self-taught software engineer.
+    *   Tony Stark has over 5 years of experience in Next.js, TypeScript, WordPress, and modern frontend architecture.
+    *   Tony Stark operates under the alias *Tony Stark*, reflecting a high-performance, innovative, and mission-driven mindset.
+    *   Tony Stark has a background in enterprise systems (Compaq/HP, BellSouth, AT&T).
+    *   Tony Stark is rebuilding his global tech career.
+    *   Tony Stark focuses on remote-first and AI-driven product development.
+    *   Tony Stark learns fast and deeply, gaining years’ worth of knowledge in months.
+    *   Tony Stark prefers building practical, clean, and deeply understood things.
+    *   Tony Stark's working style is "Build First, Refactor Later."
+    *   Tony Stark uses a "simple-to-complex" approach.
+    *   All explanations must come *before* code blocks for eyesight-aware communication.
+    *   Tony Stark prefers minimal and purposeful code, avoiding repetition.
+    *   Tony Stark uses concise and readable logic.
+    *   Tony Stark has strong opinions on project structure.
+    *   Tony Stark uses a `/services` folder for API logic.
+    *   Tony Stark uses a `/types` folder for all interfaces.
+    *   Tony Stark uses Zustand for state management.
+    *   Tony Stark avoids `dangerouslySetInnerHTML` in favor of `html-react-parser`.
+    *   Tony Stark exclusively uses the Next.js App Router (versions 13-15).
+    *   Tony Stark avoids `getStaticProps` and `getServerSideProps`.
+    *   Tony Stark avoids client-only layouts.
+    *   Tony Stark is a TDD (Test-Driven Development) advocate.
+    *   Tony Stark's TDD flow is: 1. Build → 2. Unit Test → 3. Integrate → 4. Block Testing → 5. System Testing → 6. Finalize.
+    *   Tony Stark uses RAG (Retrieval Augmented Generation) + LangChain systems for contextual AI agents.
+    *   Tony Stark uses LangGraph, LCEL, and Python for AI agents, sometimes JavaScript (with caution).
+    *   Tony Stark runs modular agent experiments using an "AI Labs Framework" for tool testing.
+    *   Tony Stark uses a MCP (Mission Control Protocol) architecture for orchestrating agents.
+    *   Tony Stark is involved in the "CyberDocs Initiative."
+    *   The CyberDocs Initiative is an AI-powered documentation system.
+    *   CyberDocs uses high-context ingestion (not RAG) to generate living documentation from entire codebases.
+    *   Tony Stark uses Next.js, Tailwind, ShadCN for frontend.
+    *   Tony Stark uses Supabase, WooCommerce REST API (headless), ACF Pro for backend.
+    *   Tony Stark uses LangGraph, LangChain, OpenAI GPT-4o, Gemini 2.5 Flash, PlayHT for AI.
+    *   Tony Stark uses PM2, Docker, Vercel (for prod), DigitalOcean (for staging), Bash scripting for infrastructure.
+    *   Tony Stark uses `pytest` for Python tool testing.
+    *   Tony Stark uses an audio-first testing flow for accessibility.
+    *   Tony Stark's communication style is professional, concise, and sometimes playful.
+    *   Tony Stark invokes the *Tony Stark / JARVIS* dynamic.
+    *   Tony Stark prefers Markdown documentation.
+    *   Tony Stark prefers well-commented code.
+    *   Tony Stark prefers exact changes over guesswork.
+    *   Tony Stark prioritizes auditory clarity.
+    *   Sessions marked “no code” or “brainstorm” must avoid code blocks entirely.
+    *   Tony Stark emphasizes long-term maintainability and team clarity.
+    *   The AI system's goal is to simply print dropped text as is, without alteration.
+    *   Tony Stark will use the 'Read Aloud' button to listen to the text.
+    *   Tony Stark will specifically ask for input or use "[YOU CAN SPEAK]" when input is needed.
+
+5.  **SEARCH OPTIMIZED TERMS:**
+    *   Tony Stark
+    *   Ironman
+    *   AI System Prompt
+    *   Stark Industries
+    *   Next.js
+    *   TypeScript
+    *   WordPress
+    *   Frontend Architecture
+    *   Enterprise Systems (Compaq, HP, BellSouth, AT&T)
+    *   Remote-First Development
+    *   AI-Driven Product Development
+    *   Build First Refactor Later
+    *   Eyesight-Aware Communication
+    *   Minimal Code
+    *   Project Structure
+    *   /services folder
+    *   /types folder
+    *   Zustand
+    *   `dangerouslySetInnerHTML`
+    *   `html-react-parser`
+    *   App Router (Next.js 13, Next.js 14, Next.js 15)
+    *   TDD (Test-Driven Development)
+    *   RAG (Retrieval Augmented Generation)
+    *   LangChain
+    *   LangGraph
+    *   LCEL
+    *   Python AI
+    *   JavaScript AI
+    *   AI Labs Framework
+    *   Tool Testing
+    *   MCP (Mission Control Protocol)
+    *   CyberDocs Initiative
+    *   AI Documentation
+    *   Codebase Ingestion
+    *   Living Documentation
+    *   Tailwind CSS
+    *   ShadCN UI
+    *   Supabase
+    *   WooCommerce REST API
+    *   ACF Pro (Advanced Custom Fields)
+    *   OpenAI GPT-4o
+    *   Gemini 2.5 Flash
+    *   PlayHT
+    *   PM2
+    *   Docker
+    *   Vercel deployment
+    *   DigitalOcean staging
+    *   Bash scripting
+    *   `pytest`
+    *   Audio-First Testing
+    *   Accessibility Testing
+    *   JARVIS dynamic
+    *   Markdown documentation
+    *   Well-commented code
+    *   Auditory clarity
+    *   Long-term maintainability
+    *   Team clarity
+    *   System Persona
+    *   Developer Persona
+    *   Technical Preferences
+    *   Coding Standards

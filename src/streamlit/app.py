@@ -1,12 +1,12 @@
 import streamlit as st
 
 from src.streamlit.components.sidebar import render_sidebar
-from src.streamlit.pages import corpus_manager, qa_test, upload
+from src.streamlit.pages import corpus_manager, dashboard, qa_test, upload
 
 INITIAL_STATE = {
     "active_project_id": None,
     "active_project_name": None,
-    "active_page": "corpus",
+    "active_page": "dashboard",
     "projects": [],
     "qa_messages": [],
     "upload_status": None,
@@ -14,6 +14,9 @@ INITIAL_STATE = {
     "selected_docs": [],
     "corpus_needs_refresh": False,
     "api_healthy": None,
+    "pending_delete": False,
+    "dashboard_result": None,
+    "cleanup_preview": None,
 }
 
 
@@ -28,15 +31,22 @@ def main() -> None:
     initialize_session_state()
     render_sidebar()
 
-    tab1, tab2, tab3 = st.tabs(["📁 Corpus Manager", "⬆️ Upload", "🔍 Q&A Test"])
+    st.title("Stark RAG Dev Rig")
+
+    tab1, tab2, tab3, tab4 = st.tabs(
+        ["📊 Dashboard", "📁 Corpus Manager", "⬆️ Upload", "🔍 Q&A Test"]
+    )
 
     with tab1:
-        corpus_manager.render()
+        dashboard.render()
 
     with tab2:
-        upload.render()
+        corpus_manager.render()
 
     with tab3:
+        upload.render()
+
+    with tab4:
         qa_test.render()
 
 

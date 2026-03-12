@@ -36,10 +36,15 @@ class FakeDocumentAPI:
     def __init__(self, documents: list[SimpleNamespace]) -> None:
         self.documents = documents
         self.deleted: list[dict[str, object]] = []
+        self.detail = SimpleNamespace(name="doc-1", display_name="Resume")
 
     def list(self, parent: str) -> list[SimpleNamespace]:
         self.last_parent = parent
         return self.documents
+
+    def get(self, *, name: str):
+        self.last_get_name = name
+        return self.detail
 
     def delete(self, *, name: str, config: dict[str, object]) -> None:
         self.deleted.append({"name": name, "config": config})
@@ -60,6 +65,7 @@ class FakeFileSearchStores:
         self.operation = operation or FakeOperation(done=True)
         self.upload_calls: list[dict[str, object]] = []
         self.deleted: list[str] = []
+        self.list_result = [self.store]
 
     def create(self, *, config: dict[str, object]) -> SimpleNamespace:
         self.last_create_config = config
@@ -67,6 +73,13 @@ class FakeFileSearchStores:
 
     def delete(self, *, name: str) -> None:
         self.deleted.append(name)
+
+    def get(self, *, name: str):
+        self.last_get_name = name
+        return self.store
+
+    def list(self):
+        return self.list_result
 
     def upload_to_file_search_store(
         self,
@@ -152,6 +165,57 @@ def test_list_documents_returns_plain_dicts() -> None:
         {"name": "doc-1", "display_name": "Resume"},
         {"name": "doc-2", "display_name": "Summary"},
     ]
+
+
+def test_get_store_details_returns_plain_dict() -> None:
+    client = make_client()
+    service = RagService(client=client)
+
+    result = service.get_store_details("fileSearchStores/demo")
+
+    assert result["name"] == "fileSearchStores/demo"
+    assert result["display_name"] == "Demo"
+
+
+def test_verify_stores_returns_document_counts() -> None:
+    client = make_client(documents=[SimpleNamespace(name="doc-1", display_name="Resume")])
+    service = RagService(client=client)
+
+    result = service.verify_stores()
+
+    assert result == [
+        {
+            "name": "fileSearchStores/demo",
+            "display_name": "Demo",
+            "document_count": 1,
+        }
+    ]
+
+
+def test_get_document_details_returns_plain_dict() -> None:
+    client = make_client()
+    service = RagService(client=client)
+
+    result = service.get_document_details("doc-1")
+
+    assert result["name"] == "doc-1"
+    assert result["display_name"] == "Resume"
+
+
+def test_get_operation_status_returns_json_safe_payload() -> None:
+    operation = SimpleNamespace(name="operations/123", done=True, metadata={"phase": "done"}, error=None)
+    client = make_client()
+    client.operations = SimpleNamespace(get=lambda _op: operation)
+    service = RagService(client=client)
+
+    result = service.get_operation_status("operations/123")
+
+    assert result == {
+        "name": "operations/123",
+        "done": True,
+        "metadata": {"phase": "done"},
+        "error": None,
+    }
 
 
 def test_generate_summary_uses_pdf_part_and_prompt() -> None:
@@ -290,6 +354,26 @@ def test_delete_document_uses_force_flag() -> None:
             "name": "fileSearchStores/demo/documents/doc-1",
             "config": {"force": True},
         }
+    ]
+
+
+def test_cleanup_store_deletes_all_documents() -> None:
+    documents = [
+        SimpleNamespace(name="doc-1", display_name="Resume"),
+        SimpleNamespace(name="doc-2", display_name="Summary"),
+    ]
+    client = make_client(documents=documents)
+    service = RagService(client=client)
+
+    removed = service.cleanup_store("fileSearchStores/demo")
+
+    assert removed == [
+        {"name": "doc-1", "display_name": "Resume"},
+        {"name": "doc-2", "display_name": "Summary"},
+    ]
+    assert client.file_search_stores.documents.deleted == [
+        {"name": "doc-1", "config": {"force": True}},
+        {"name": "doc-2", "config": {"force": True}},
     ]
 
 

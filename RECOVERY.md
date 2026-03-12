@@ -1,4 +1,4 @@
 # Recovery State
-Last action: API route layer complete — 38 tests passing
+Last action: Fixed Verify All Stores false "Cannot reach API" — frontend timeout raised to 120s
 Pending: NONE
-Next step: Streamlit implementation (Step 8 in APP_BRIEF)
+Next step: Continue manual testing — await Plan 2 from Tony

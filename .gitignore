@@ -49,3 +49,6 @@ htmlcov/
 
 # Streamlit
 .streamlit/
+
+# Runtime logs
+logs/*.log

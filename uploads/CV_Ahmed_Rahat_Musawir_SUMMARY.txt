@@ -1,0 +1,212 @@
+Here's a structured summary of the provided resume:
+
+**1. DOCUMENT TYPE:**
+Professional Resume / Curriculum Vitae (CV)
+
+**2. MAIN TOPICS:**
+*   Full-Stack Web Development (React/Next.js, PHP, Node.js, WordPress, E-commerce)
+*   DevOps and System Administration (Linux, VPS, Docker, Hosting, Scripting, Security)
+*   IT Systems Analysis & Support (Multi-tier applications, Database, Network, QA, Training)
+*   Technical Skills & Certifications
+
+**3. KEY ENTITIES - LIST ALL:**
+
+*   **People:**
+    *   Ahmed Musawir
+
+*   **Companies/Organizations:**
+    *   Cyberize Group
+    *   DeepCast.ai
+    *   HTMLfiveDev.com
+    *   Omen Interactive
+    *   Upwork.com
+    *   Freelancer.com
+    *   eTechCorners.com
+    *   AT&T
+    *   Red Celsius Inc.
+    *   Solutions inc.
+    *   BellSouth Mobility D C S
+    *   HP
+    *   San Francisco International University
+
+*   **Products/Platforms/Tools:**
+    *   REST APIs
+    *   Strapi
+    *   Sanity.io
+    *   CompTIA A+
+    *   Network+
+    *   Sun Certified Systems Administrator
+    *   Security+
+    *   MCP + I
+    *   HTML5
+    *   CSS
+    *   SCSS
+    *   TypeScript
+    *   Javascript (ES6, OOP)
+    *   jQuery
+    *   React.js
+    *   Next.js
+    *   Firebase 9
+    *   Node.js
+    *   Express
+    *   PHP
+    *   SQL
+    *   MySQL
+    *   Firestore
+    *   Unix Korn Shell
+    *   BASH shell
+    *   SSH
+    *   GraphQL
+    *   Docker
+    *   Material UI
+    *   Bootstrap 5x
+    *   React Bootstrap
+    *   Styled Component
+    *   Tailwind
+    *   Git
+    *   Github
+    *   Compass
+    *   Composer
+    *   Wordmove
+    *   NPM
+    *   MAMP Pro
+    *   Photoshop
+    *   Vi
+    *   Vim
+    *   Nano
+    *   VSCode
+    *   Atom
+    *   Gulp.js
+    *   Virtual Box
+    *   VMWare
+    *   Mac OSX
+    *   Windows 10
+    *   CentOS 7
+    *   WordPress
+    *   Woocommerce
+    *   ACF Pro
+    *   SMB2
+    *   PHPMyAdmin
+    *   VPS Management
+    *   Plesk
+    *   Cpanel
+    *   WHM
+    *   Digital Ocean Droplet
+    *   DNS management
+    *   Nginx
+    *   Vercel
+    *   Netlify
+    *   GraphCMS
+    *   Moose Framework 2.0
+    *   WordPress.org
+    *   WP Security & Page Load Speed
+    *   Bourbon
+    *   WP-SCSS plugin
+    *   WP Settings API
+    *   WP Options API
+    *   WP Rest API
+    *   WP Widgets API
+    *   WordFence Plugin
+    *   LastPass
+    *   Gtmetrix
+    *   Pingdom
+    *   CDN
+    *   Google Tag Manager
+    *   Shopify
+    *   BuyButton.js
+    *   Google Analytics
+    *   FaceBook Ecommerce events tracking
+    *   Java
+    *   Weblogic
+    *   iPlanet
+    *   Oracle
+    *   Sun Solaris
+    *   Zion (monitoring system)
+    *   Telnet
+    *   RSH
+    *   XML
+    *   Apache
+    *   mailx
+    *   Quickpay Atlanta (application)
+    *   Quickpay Dallas (application)
+    *   Telalert pages
+    *   WinRunner 7i
+    *   Test Director
+    *   Windows NT
+    *   Windows 2000
+    *   DHCP
+    *   SQL Server
+    *   Proxy Server
+    *   IIS
+    *   Jakarta Tomcat
+    *   StoreMaster (application)
+    *   RAS (Remote Access Services)
+    *   Sybase database
+    *   Digital/Compaq Desktops
+    *   Laptops
+    *   Network Cards
+    *   Digital Alpha Servers
+    *   Compaq Proliant Servers
+
+*   **Dates, Numbers, Metrics:**
+    *   16 years (IT industry experience)
+    *   6 years (freelance Web Developer)
+    *   6 years (React/Next.js Engineer)
+    *   January 2019 - Present (4 years 9 months at Cyberize Group)
+    *   November 2017 - December 2018 (1 year 2 months at DeepCast.ai)
+    *   November 2012 - October 2017 (5 years at HTMLfiveDev.com)
+    *   April 2016 - May 2018 (worked for Omen Interactive)
+    *   September 2010 - October 2012 (2 years 2 months at eTechCorners.com)
+    *   February 2002 - July 2010 (8 years 6 months at AT&T)
+    *   July 2001 - January 2002 (7 months at Red Celsius Inc.)
+    *   July 2000 - June 2001 (1 year at Solutions inc.)
+    *   July 1998 - June 2000 (2 years at BellSouth Mobility D C S)
+    *   January 1997 - June 1998 (1 year 6 months at HP)
+    *   2004 - 2006 (MBA education)
+    *   2001 - 2004 (B.Com education)
+    *   3 Linux-based VPS-s
+    *   15 multi-tier web-based applications
+    *   $9/month (Shopify account mentioned)
+    *   4th tier support
+    *   7i (WinRunner version)
+    *   NT 4.0 (Windows version)
+    *   Windows 2000
+    *   Solaris 8
+    *   Weblogic 6
+    *   301, 302 (redirects)
+    *   ES6 (Javascript standard)
+    *   9 (Firebase version)
+    *   5x (Bootstrap version)
+    *   4 (Bootstrap version)
+    *   7 (CentOS version)
+    *   10 (Windows version)
+    *   8 (total pages in document)
+    *   1 (current page number on page 1)
+
+**4. COMPLETE FACT LIST:**
+
+*   **Contact Information:** Ahmed Musawir can be reached at ahmed.musawir@gmail.com and via LinkedIn at www.linkedin.com/in/ahmedmusawir. He is located in Alpharetta, Georgia, United States.
+*   **Summary of Experience:** An IT professional with 16 years of U.S. IT industry experience, including 6 years as a freelance Web Developer and 6 years as a React/Next.js Engineer. Seeks a dynamic environment for learning and growth.
+*   **Portfolio & YouTube:** Portfolio available at https://themoose.cyberizestaging.com/ and YouTube channel at https://www.youtube.com/@htmlfivedev.
+*   **Top Skills:** REST APIs, Strapi, Sanity.
+*   **Languages:** Bengali, Hindi, English, Urdu.
+*   **Certifications:** CompTIA A+, Network+, Sun Certified Systems Administrator, Security+, MCP + I.
+*   **Technical Proficiencies (TECHNOLOGIES):** HTML5, CSS, SCSS, TypeScript, Javascript (ES6, OOP), jQuery, React.js, Next.js, Firebase 9, Node.js, Express, PHP, SQL, MySQL, Firestore, Unix Korn Shell, BASH shell, SSH, REST APIs, GraphQL.
+*   **Development & Infrastructure Tools (TOOLS):** Docker, Strapi, Sanity.io, Material UI, Bootstrap 5x, React Bootstrap, Styled Component, Tailwind, Git & Github, Compass, Composer, Wordmove, NPM, MAMP Pro, Photoshop, Vi, Vim, Nano, VSCode, Atom, Gulp.js, Virtual Box, VMWare, Mac OSX, Windows 10, CentOS 7, WordPress, Woocommerce, ACF Pro, SMB2, PHPMyAdmin.
+*   **Hosting & Deployment (HOSTING):** VPS Management, Plesk, Cpanel, WHM, Digital Ocean Droplet-based hosting w/ shell script automation, Docker-based deployments via shell script, DNS management, Next.js and Strapi hosting with SSL via Nginx reverse lookup, shell script-based React App deployment, shell script-based Next.js App deployment & update via Github, Vercel, Netlify.
+*   **Cyberize Group (Sr. Web Developer & React/Next.js Engineer, Jan 2019 - Present):** Developed apps with ES6/React.js & Next.js and backend APIs/CMS (Strapi, Sanity.io, GraphCMS, WordPress, WooCommerce). Developed WordPress websites & plugins from scratch with ES6 JS, React.js & PHP. Deployed React/Next.js apps via KSH shell scripts, Docker, SSH & Docker Hub. Managed & Maintained 3 Linux-based VPS-s with WHM, cPanel/Plesk & Docker for development, staging & production.
+*   **DeepCast.ai (Frontend React Developer, Nov 2017 - Dec 2018):** Researched React-related tech stacks (Next.js, React Starter kits), responsive frameworks/UI/UX platforms (Bootstrap, React Bootstrap, Ant Design, Material), JS backends (Node.js, Express) and React-based deployment frameworks (Docker, Zeit). Developed company website as a React App using Styled Component, Bootstrap, React Bootstrap, Flexbox. Pulled data using dummy backend (JSON Server with Docker). Converted React App to PWA with Next.js. Published to staging (Digital Ocean) via KSH shell script, Docker & Docker Hub. Deployed to production on Zeit.
+*   **HTMLfiveDev.com (Freelance Web Designer and Developer, Nov 2012 - Oct 2017):** Worked for Omen Interactive (Apr 2016 - May 2018). Available on Upwork.com & Freelancer.com. Built fully custom WordPress sites (PSD to WP conversion, custom themes using Moose Framework 2.0 with WP Security & Page Load Speed, analytics, Bootstrap 4 SCSS, Gulp.js). Customized 3rd party themes (child themes, SCSS compiler, Bourbon/Compass, WP-SCSS plugin). Customized WordPress backend without plugins (admin screen/menus, Post/Page Editors, Sidebars, Custom Meta boxes, Linked Images, Videos, Custom Post Types & Taxonomies, WP_Query loops). Fast & secure deployment via SSH for staging updates. Built WordPress plugins & widgets using WP Settings API, Options API, REST API, Widgets API, proficient in REST API data manipulation, extending REST API with PHP, custom endpoints.
+*   **eTechCorners.com (Web Master, Sep 2010 - Oct 2012):** Managed WordPress security (manual PHP lockdown, custom login, dir browsing lockdown, wp-config.php .htaccess lockdown, WordFence, DB hardening, LastPass client training). Optimized WordPress page load speed (server caching, .htaccess browser caching, Gtmetrix & Pingdom benchmarks, Photoshop image optimization, CDN). Managed web hosting (WHM & cPanel, DNS, MX, SSL, SSH, Addon Domains, 301/302/wildcard redirects). Managed CentOS VPS (LAMP stack setup, BASH scripts for backend tasks, automated WP updates via wp-cli/bash/cron, automated WP data backup/restore, Google Drive backups). Handled Ecommerce for Woocommerce (install/config, store functions, custom themes, Google Tag Manager). Handled Shopify (online store setup, tasks, products into WordPress, WP Blog with Shopify Store, HTML integration, custom trackable BuyButton.js, Google Analytics & Facebook Ecommerce tracking on Store Less account).
+*   **AT&T (Sr. Systems Analyst, Feb 2002 - Jul 2010):** Provided 4th tier support for 15 multi-tier web-based applications (Retail/Financial) using Java, Weblogic, iPlanet, Oracle, Sun Solaris. Designed, developed, implemented, and supported "Zion" (Web-based application management & monitoring) using Perl, Korn shell, Telnet, RSH, XML, Oracle SQL, with automated nightly backups. Managed App failover and updates on remote file servers. Automated "Morning Checkout" process using Korn shell, Bash shell, rsh, Perl, mailx. Automated database indexing, billing data backup, and daemon bouncing for "Quickpay Atlanta" and "Quickpay Dallas" applications, including failover. Responded to "Telalert" pages and resolved production issues. Participated in conference bridges for production emergencies. Created virtual environments (VMware) for issue recreation. Designed, developed, implemented, and supported "Osiris" (on-demand Web-based application management & monitoring) using LAMP, Korn Shell, XML, Java, with SSH for secure requests.
+*   **Red Celsius Inc. (Quality Assurance Analyst, Jul 2001 - Jan 2002):** Wrote and executed Test Plans/Cases in Test Director. Performed manual tests and bug reporting. Automated regression tests via WinRunner 7i. Deployed application on Weblogic 6 on Solaris 8. Set up Lab environments with VMware and deployed applications for testing. Automated system cleanup for new build deployments using Korn Shell and mailx.
+*   **Solutions inc. (IT Trainer, Jul 2000 - Jun 2001):** Provided training on hardware/networking, UNIX shell scripting, ASP/Java scripting, Oracle PL/SQL, WinRunner automation. Administered/upgraded network from Windows NT to Windows 2000. Configured DNS, DHCP, SQL Server, Proxy Server, Test Director 7 on IIS. Configured Apache Web server/router firewall for company website. Administered users/groups on Solaris/Linux for labs. Installed/configured Java SDK/Jakarta Tomcat on Windows NT, Solaris, Linux.
+*   **BellSouth Mobility D C S (Systems Analyst, Jul 1998 - Jun 2000):** Provided second-level support for "StoreMaster" application. Remote administration for Windows NT 4.0 network via RAS. Ran SQL queries on Sybase for data collection/updates and processing failed credit card transactions. Troubleshot and resolved customer trouble tickets. Provided training on new applications/policies.
+*   **HP (Systems Engineer, Jan 1997 - Jun 1998):** Provided phone hardware/OS support for Digital/Compaq Desktops, Laptops, Network Cards, Digital Alpha Servers, Compaq Proliant Servers on Windows, UNIX, Linux. Logged calls, guided customers through software/driver installation, dispatched field techs. Recreated and resolved hardware/OS issues in lab with senior engineers.
+*   **Education (San Francisco International University):** Master of Business Administration (MBA) in Information Technology Project Management (2004-2006) and Bachelor of Commerce (B.Com.) in Computer Information Systems (2001-2004).
+
+**5. SEARCH OPTIMIZED TERMS:**
+*   **Roles:** Sr. Web Developer, React Engineer, Next.js Engineer, FullStack Developer, Frontend Developer, Backend Developer, DevOps Engineer, Systems Analyst, QA Analyst, IT Trainer, Web Master, Systems Engineer, Freelance Developer.
+*   **Technologies & Skills:** React.js, Next.js, JavaScript (ES6), TypeScript, Node.js, PHP, HTML5, CSS, SCSS, SQL, MySQL, GraphQL, REST APIs, Docker, Strapi, Sanity.io, WordPress, WooCommerce, Shopify, Linux (CentOS), Bash Scripting, Korn Shell, SSH, Git, GitHub, VPS Management, cPanel, WHM, Nginx, Vercel, Netlify, Material UI, Bootstrap, Tailwind CSS, styled-components, Firebase, Express.js, Oracle, Java, XML, Perl, VMware, Apache, Weblogic, IIS, Sybase, WinRunner, Test Director, DNS, SSL, CDN, Project Management, IT Support, Technical Support, Network Administration, Database Administration, Web Security, Performance Optimization, UI/UX Design, Progressive Web Apps (PWA), CI/CD, Deployment Automation.
+*   **Acronyms & Abbreviations:** JS, TS, OOP, PWA, CMS, API, UI, UX, CLI, DB, OS, RAS, SDK, MBA, B.Com, IT, QA.
+*   **Phrasings:** React Next.js Development, Full-Stack Web Development, Linux System Administration, Cloud Hosting, E-commerce Solutions, WordPress Customization, Frontend Engineering, Backend Development, DevOps Automation, Production Support, Application Monitoring, Quality Assurance Testing, IT Training, Network Configuration, Server Management, Cybersecurity Measures, Page Speed Optimization, Remote System Administration.
