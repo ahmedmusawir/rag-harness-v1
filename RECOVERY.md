@@ -1,4 +1,4 @@
 # Recovery State
-Last action: Fixed Verify All Stores false "Cannot reach API" — frontend timeout raised to 120s
+Last action: RAGAS baseline eval complete — Context Recall 0.3576 | Faithfulness 0.4536 | Answer Relevancy 0.8078
 Pending: NONE
-Next step: Continue manual testing — await Plan 2 from Tony
+Next step: Accuracy improvement experiments — HyDE first, then Layout Parser, then Task Embeddings (per project_timeline_stark.docx Priority 2)

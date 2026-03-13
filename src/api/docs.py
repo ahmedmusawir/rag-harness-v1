@@ -30,6 +30,14 @@ logger = get_logger(__name__)
 ALLOWED_TYPES = {
     ".pdf": "application/pdf",
     ".txt": "text/plain",
+    ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    ".csv": "text/csv",
+    ".md": "text/markdown",
+    ".html": "text/html",
+    ".json": "application/json",
+    ".rtf": "application/rtf",
 }
 UPLOADS_DIR = Path("uploads")
 
@@ -52,7 +60,7 @@ def _validate_upload(file: UploadFile, file_bytes: bytes, project: dict[str, obj
     if expected_mime is None or file.content_type != expected_mime:
         raise HTTPException(
             status_code=400,
-            detail="File type not supported. Accepted: PDF, TXT",
+            detail="File type not supported. Accepted: PDF, DOCX, XLSX, PPTX, TXT, CSV, MD, HTML, JSON, RTF",
         )
 
     max_bytes = config.MAX_FILE_SIZE_MB * 1024 * 1024
@@ -72,7 +80,7 @@ def _validate_upload(file: UploadFile, file_bytes: bytes, project: dict[str, obj
     if not display_name:
         raise HTTPException(
             status_code=400,
-            detail="File type not supported. Accepted: PDF, TXT",
+            detail="File type not supported. Accepted: PDF, DOCX, XLSX, PPTX, TXT, CSV, MD, HTML, JSON, RTF",
         )
     return display_name
 

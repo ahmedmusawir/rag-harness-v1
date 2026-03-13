@@ -1,0 +1,54 @@
+# Document Summary
+
+## Document Title
+Stark Industries Project Timeline 2025-2026
+
+## Document Type
+general_document
+
+## Document Purpose
+This document outlines the project timeline and status for Stark Industries during 2025 and 2026. It specifies the owner, last update date, Q1 2026 project priorities, and conditions for certain project initiations.
+
+## Main Topics
+*   Project timelines and status
+*   Q1 2026 Project Priorities
+*   Retrieval Augmented Generation (RAG) evaluation and improvement
+*   Software development projects (ADK Harness, CyberBugs, MCP server)
+*   Conditional project initiation
+
+## Key Entities
+### People
+Tony Stark
+### Systems / Platforms
+OpenBrain
+ADK Harness
+CyberBugs
+MCP server
+### Tools / Frameworks
+RAG (Retrieval Augmented Generation)
+HyDE
+Layout Parser
+Task Embeddings
+RAGAS
+
+## Key Facts
+*   No projects were explicitly mentioned as completed in 2025 in the provided text.
+*   Projects currently in progress in 2026 include: OpenBrain RAG eval baseline, accuracy improvement experiments (HyDE, Layout Parser, Task Embeddings), ADK Harness Phase 1A Rico agent, CyberBugs v1.0 ticket board. MCP server work is contingent.
+*   The priority order for Q1 2026 is:
+    1.  Complete OpenBrain RAG eval baseline.
+    2.  Run accuracy improvement experiments (HyDE first, then Layout Parser, then Task Embeddings).
+    3.  Complete ADK Harness Phase 1A Rico agent with context caching.
+    4.  CyberBugs v1.0 ticket board feature complete.
+*   MCP server work will not begin until OpenBrain RAG accuracy is above 0.75 on all RAGAS metrics.
+*   The document was last updated on March 1, 2026.
+*   The provided text does not specify "who" is responsible for "what" in Q1 2026, only listing the tasks and priorities.
+
+## Searchable Questions
+*   What are the top priorities for Stark Industries in Q1 2026?
+*   When was the Stark Industries project timeline last updated?
+*   What is the condition for starting the MCP server work?
+*   Which projects are actively being worked on in early 2026?
+*   What are the planned steps for improving OpenBrain RAG accuracy?
+
+## Short Abstract
+This document outlines the Stark Industries project timeline for 2025-2026, owned by Tony Stark and last updated on March 1, 2026. It details critical priorities for Q1 2026, focusing on completing the OpenBrain RAG evaluation baseline, followed by accuracy improvement experiments utilizing HyDE, Layout Parser, and Task Embeddings. Other key projects include completing the ADK Harness Phase 1A Rico agent and the CyberBugs v1.0 ticket board, with the initiation of MCP server work being strictly contingent on OpenBrain RAG achieving an accuracy above 0.75 across all RAGAS metrics.

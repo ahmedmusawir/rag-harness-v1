@@ -1,0 +1,59 @@
+# Document Summary
+
+## Document Title
+OpenBrain Project Meeting Brief - February 14, 2026
+
+## Document Type
+meeting_notes
+
+## Document Purpose
+This document summarizes the OpenBrain project meeting held on February 14, 2026. It outlines the project's core problem (vendor lock-in), current status (prototype phase), key decisions made, items deferred or blocked, the next milestone, and confirms the project's technical stack.
+
+## Main Topics
+*   OpenBrain project status and problem statement (vendor lock-in)
+*   Meeting decisions, deferrals, and blockers
+*   Next project milestone: RAG evaluation baseline with RAGAS
+*   Confirmed technical stack for OpenBrain
+*   Session management and UI features
+
+## Key Entities
+### People
+*   Tony Stark
+*   Rico Vega
+*   Maya Chen
+### Systems / Platforms
+*   Claude
+*   ChatGPT
+*   Gemini
+*   OpenBrain
+*   MCP server
+*   Vertex AI Search
+*   Cloud Run
+*   GCS bucket
+*   Gemini 2.5 Flash
+### Tools / Frameworks
+*   FastAPI
+*   Streamlit
+*   RAGAS
+
+## Key Facts
+*   The core problem OpenBrain solves is vendor lock-in when switching AI platforms.
+*   OpenBrain is designed as a personal knowledge base that travels with the user via an MCP server.
+*   The project is currently in the prototype phase.
+*   Load-on-demand session management was deferred to Phase 2.
+*   Source badges in the UI were deferred due to Vertex not reliably returning line numbers.
+*   MCP server build is blocked until the FastAPI wrapper is stable and tested.
+*   The next milestone is a working RAG eval baseline using RAGAS, due by March 7, 2026.
+*   Tony Stark will upload 4 test documents, including his resume, for RAGAS evaluation.
+*   Rico Vega will run the RAGAS pipeline and produce a score table before improvements.
+*   The confirmed tech stack includes: Backend: FastAPI on Cloud Run; Vector Store: Vertex AI Search; Frontend (prototype): Streamlit; Auth: API Key (header-based X-API-KEY); Storage: GCS bucket; LLM: Gemini 2.5 Flash.
+
+## Searchable Questions
+1.  What is the current status of the OpenBrain project?
+2.  What technology stack is OpenBrain using for its backend and vector store?
+3.  What is the next major milestone for the OpenBrain project and when is it due?
+4.  What challenges or blockers did the OpenBrain team encounter during the meeting?
+5.  What problem is the OpenBrain project designed to solve?
+
+## Short Abstract
+This meeting brief from February 14, 2026, details the OpenBrain project's status in the prototype phase, addressing vendor lock-in by creating a personal knowledge base (OpenBrain) accessible across AI platforms via an MCP server. Key decisions included deferring load-on-demand session management and UI source badges, while the MCP server build is blocked awaiting FastAPI wrapper stability. The confirmed tech stack comprises FastAPI on Cloud Run for the backend, Vertex AI Search as the vector store, Streamlit for the frontend prototype, API Key authentication, GCS for storage, and Gemini 2.5 Flash as the LLM. The next milestone is to establish a RAGAS-based RAG evaluation baseline by March 7, 2026.

@@ -40,11 +40,55 @@ def _set_result(title: str, payload: dict[str, object]) -> None:
         "title": title,
         "payload": payload,
     }
+    st.session_state.health_check_result = None
 
 
 def _show_resource(label: str, value: str) -> None:
     st.caption(label)
     st.code(value or "(empty)", language="text")
+
+
+def _parse_health(health_resp, openapi_resp) -> dict:
+    status = "ok" if health_resp.status_code == 200 else "error"
+    rows = []
+    try:
+        spec = openapi_resp.json()
+        method_order = {"get": 0, "post": 1, "delete": 2}
+        for path, methods in sorted(spec.get("paths", {}).items()):
+            for method, detail in methods.items():
+                if method not in method_order:
+                    continue
+                rows.append({
+                    "Method": method.upper(),
+                    "Endpoint": path,
+                    "Description": detail.get("summary", ""),
+                })
+        rows.sort(key=lambda r: (r["Endpoint"], method_order.get(r["Method"].lower(), 9)))
+    except Exception:
+        pass
+    return {"status": status, "endpoints": rows}
+
+
+def _render_health(data: dict) -> None:
+    status = data.get("status", "error")
+    if status == "ok":
+        st.success("API Status: ok")
+    else:
+        st.error(f"API Status: {status}")
+
+    rows = data.get("endpoints", [])
+    if rows:
+        st.markdown("**Registered Endpoints**")
+        st.dataframe(
+            pd.DataFrame(rows),
+            hide_index=True,
+            use_container_width=True,
+            column_config={
+                "Method": st.column_config.TextColumn(width="small"),
+                "Endpoint": st.column_config.TextColumn(width="medium"),
+                "Description": st.column_config.TextColumn(width="large"),
+            },
+        )
 
 
 def render() -> None:
@@ -110,7 +154,7 @@ def render() -> None:
                 _show_resource("Summary document resource", str(doc.get("summary_doc_name", "")))
 
     st.markdown("### Diagnostics")
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         if st.button("Check Store", use_container_width=True):
             try:
@@ -130,6 +174,15 @@ def render() -> None:
             try:
                 response = api_client.get("/stores/verify", timeout=120)
                 _set_result("Verify All Stores", _response_payload(response))
+            except ConnectionError:
+                st.error("Cannot reach API. Is the server running on port 8000?")
+    with col4:
+        if st.button("Health Check", use_container_width=True):
+            try:
+                health_resp = api_client.get("/health")
+                openapi_resp = api_client.get("/openapi.json")
+                st.session_state.health_check_result = _parse_health(health_resp, openapi_resp)
+                st.session_state.dashboard_result = None
             except ConnectionError:
                 st.error("Cannot reach API. Is the server running on port 8000?")
 
@@ -198,6 +251,11 @@ def render() -> None:
             if st.button("Cancel Cleanup", use_container_width=True):
                 st.session_state.cleanup_preview = None
                 st.rerun()
+
+    health = st.session_state.health_check_result
+    if health:
+        st.markdown("### Health Check")
+        _render_health(health)
 
     result = st.session_state.dashboard_result
     if result:

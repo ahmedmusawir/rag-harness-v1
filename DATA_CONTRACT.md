@@ -217,8 +217,8 @@ then delete the store, then remove from projects.json.
 
 **Request:** `multipart/form-data`
 - `file`: binary file upload
-- Accepted MIME types: `application/pdf`, `text/plain`
-- Accepted extensions: `.pdf`, `.txt`
+- Accepted MIME types: `application/pdf`, `text/plain`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`, `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`, `application/vnd.openxmlformats-officedocument.presentationml.presentation`, `text/csv`, `text/markdown`, `text/html`, `application/json`, `application/rtf`
+- Accepted extensions: `.pdf`, `.txt`, `.docx`, `.xlsx`, `.pptx`, `.csv`, `.md`, `.html`, `.json`, `.rtf`
 - Both checks must pass — reject mismatches
 - Max file size: 50MB
 

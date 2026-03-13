@@ -1,0 +1,71 @@
+# Document Summary
+
+## Document Title
+Resume of Ahmed Musawir
+
+## Document Type
+resume
+
+## Document Purpose
+This document serves as Ahmed Musawir's professional resume, outlining his extensive 16-year career in the IT industry. It details his skills, work experience, education, and certifications to showcase his qualifications for potential employment, particularly in Sr. React/Next.js/Python Full-Stack Engineer roles.
+
+## Main Topics
+*   Professional Summary and Experience Overview
+*   Technical Skills and Technologies (Frontend, Backend, Databases, AI, Scripting)
+*   Development Tools and Frameworks
+*   Hosting and Deployment Expertise
+*   Certifications and Education
+*   Work History spanning various IT roles from Systems Analyst to Full Stack Engineer
+
+## Key Entities
+### People
+*   Ahmed Musawir
+
+### Systems / Platforms
+*   Digital Ocean
+*   VMWare
+*   CentOS
+*   Linux
+*   Windows (10, NT, 2000)
+*   Solaris
+*   Mac OSX
+*   WordPress
+*   Woocommerce
+*   Shopify
+*   Digital/Compaq Desktops/Laptops
+*   Digital Alpha Servers
+*   Compaq Proliant Servers
+*   Polymesh Blockchain
+*   Digital Ocean Droplet
+*   Zeit hosting platform
+*   Weblogic
+*   iPlanet
+*   Oracle
+*   Sun Solaris
+*   Sybase database
+
+### Tools / Frameworks
+*   **Technologies**: HTML5, CSS, SCSS, TypeScript, Javascript (ES6, OOP), jQuery, React.js, Next.js, Firebase 9, Supabase, Node.js, Express, PHP, SQL, MySQL, Firestore, Unix Korn Shell, BASH shell, SSH, REST APIs, GraphQL, Python, OpenAI, Langchain, Langsmith, Langserv, FastAPI, Gemini, LLama 2, Claude, HaggingFace, Java, ASP, Oracle PL/SQL.
+*   **Tools**: Docker, Strapi, Sanity.io, Material UI, Bootstrap 5x, React Bootstrap, Styled Component, Tailwind, Shadcn, Git & Github, Compass, Composer, Wordmove, NPM, MAMP Pro, Photoshop, Vi, Vim, Nano, VSCode, Atom, Gulp.js, Virtual Box, ACF Pro, SMB2, PHPMyAdmin, WHM, Plesk, Cpanel, Nginx, SSL, LastPass, Gtmetrix, Pingdom, wp-cli, cron jobs, BuyButton.js, Google Tag Manager, Google Analytics, FaceBook Ecommerce events tracking, Perl, Korn shell, Telnet, RSH, XML, Apache Web Server, mailx, Telalert, Test Director, WinRunner 7i, DNS, DHCP, SQL Server, Proxy Server, IIS, Java SDK, Jakarta Tomcat, RAS (Remote Access Services).
+
+## Key Facts
+*   Ahmed Musawir has 16 years of solid experience in the U.S. IT industry.
+*   He has worked 6 years as a freelance Web Developer and 6 years as a React/Next.js/Python Full-Stack Engineer.
+*   His current role is Sr. React/Next.js/TS Full Stack Engineer at Cyberize Group, started in January 2019.
+*   He possesses expertise in AI-based Products & Applications Development, including OpenAI, Python, and various LLMs.
+*   He developed an Application Development Framework using Next.js/TS, Strapi v4, Tailwind, DaisyUI, Auth, Data Layer, and Redux (RTK).
+*   He has extensive experience with hosting, deployment (Docker, VPS, shell scripts, Nginx), and WordPress security/optimization.
+*   He holds certifications including CompTIA A+, Network+, Sun Certified Systems Administrator, Security+, and MCP + I.
+*   His past roles include Frontend React Developer, Web Master, Systems Analyst, Quality Assurance Analyst, IT Trainer, and Systems Engineer.
+*   He has a Master of Business Administration (MBA) in Information Technology Project Management and a Bachelor of Commerce (B.Com.) in Computer Information Systems from San Francisco International University.
+*   He runs a YouTube channel focused on web development: `https://www.youtube.com/@htmlfivedev`.
+
+## Searchable Questions
+*   What are Ahmed Musawir's primary technical skills and areas of expertise?
+*   Which companies has Ahmed Musawir worked for and in what capacity?
+*   What certifications does Ahmed Musawir hold?
+*   How much experience does Ahmed Musawir have as a Full-Stack Engineer?
+*   Can I find Ahmed Musawir's educational background and degrees?
+
+## Short Abstract
+Ahmed Musawir is an IT professional with 16 years of experience, including 6 years as a freelance Web Developer and 6 years as a Sr. React/Next.js/Python Full-Stack Engineer. His expertise spans frontend (React, Next.js, TypeScript), backend (Node.js, Express, Python, PHP), databases (SQL, MySQL, Firestore), AI development (OpenAI, Langchain), and comprehensive DevOps practices including Docker, VPS management, and shell scripting. He has a strong background in WordPress, e-commerce platforms (WooCommerce, Shopify), and has held various roles from Systems Analyst to IT Trainer, indicating a broad and deep technical foundation. Ahmed holds multiple certifications and an MBA in IT Project Management.

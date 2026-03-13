@@ -399,6 +399,9 @@ For algorithmic work:
 3. If it exists → Read it. Resume context from where we left off.
 4. If it doesn't exist → Create it immediately using the template below.
 5. Do NOT proceed to any user task until both files are confirmed.
+6. **Date rollover rule:** If the calendar date changes during a long session, create the new
+   day's session file immediately before continuing any work. Never keep writing to the
+   previous day's file after midnight.
 
 > **This is Step 0. Before you read the user's first message, handle RECOVERY.md and
 > the session file.**

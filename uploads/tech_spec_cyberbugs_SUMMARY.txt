@@ -1,0 +1,59 @@
+# Document Summary
+
+## Document Title
+CyberBugs Technical Specification v1.0
+
+## Document Type
+technical_spec
+
+## Document Purpose
+This document provides the technical specifications for CyberBugs, an internal bug tracking and project management tool for Stark Industries. It details the technology stack, database schema, API conventions, authentication rules, and frontend component guidelines to be followed during its development, replacing the existing ClickUp system.
+
+## Main Topics
+*   CyberBugs overview and technology stack
+*   Database schema
+*   API route conventions and structure
+*   Authentication and role-based access control
+*   Frontend component and form development rules
+
+## Key Entities
+### People
+*   No specific individuals referenced.
+### Systems / Platforms
+*   Stark Industries
+*   ClickUp
+*   Supabase
+*   PostgreSQL
+### Tools / Frameworks
+*   Next.js 15 App Router
+*   Tailwind CSS
+*   ShadCN
+*   Zustand
+*   JWT
+*   React Hook Form
+*   Zod
+*   html-react-parser
+
+## Key Facts
+*   CyberBugs is an internal bug tracking and project management tool for Stark Industries, replacing ClickUp.
+*   The application is built using Next.js 15 App Router, Supabase (for database and auth), Tailwind CSS, and ShadCN components.
+*   State management is exclusively handled by Zustand; Redux and Context API are forbidden.
+*   Database tables include `projects`, `tickets`, `users`, `comments`, and `attachments`.
+*   API routes are under `/app/api/`, with service logic in `/services/` and types in `/types/`.
+*   Business logic is explicitly forbidden within route handler files.
+*   Supabase Auth handles authentication; JWT tokens are validated server-side in `middleware.ts`.
+*   Role-based access controls: admins (delete tickets), engineers (create/update), viewers (read-only).
+*   All permission checks occur in the service layer; client-side auth checks are not trusted.
+*   All UI components must use ShadCN; custom components are placed in `/components/ui/`.
+*   `dangerouslySetInnerHTML` is forbidden; `html-react-parser` must be used instead.
+*   All forms must use React Hook Form with Zod validation schemas defined in `/types/`.
+
+## Searchable Questions
+*   What technologies are used to build the CyberBugs application?
+*   How does CyberBugs handle user authentication and different access levels?
+*   What is the database schema for CyberBugs, including its tables?
+*   What are the architectural rules for API routes and business logic in CyberBugs?
+*   Which frontend component libraries and form validation tools are mandated for CyberBugs development?
+
+## Short Abstract
+This technical specification outlines CyberBugs, an internal bug tracking and project management tool for Stark Industries, designed to replace ClickUp. It details the technology stack, which includes Next.js 15 App Router, Supabase for database and authentication, Tailwind CSS, ShadCN, and Zustand for state management. The document specifies the PostgreSQL database schema, API route conventions that enforce separation of concerns (no business logic in route handlers), and strict authentication rules using Supabase Auth with server-side JWT validation and role-based access for admins, engineers, and viewers. Additionally, it mandates the use of ShadCN for UI components, React Hook Form with Zod for forms, and forbids `dangerouslySetInnerHTML`.

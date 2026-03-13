@@ -17,6 +17,7 @@ INITIAL_STATE = {
     "pending_delete": False,
     "dashboard_result": None,
     "cleanup_preview": None,
+    "health_check_result": None,
 }
 
 

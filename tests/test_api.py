@@ -248,7 +248,7 @@ async def test_upload_rejects_extension_mime_mismatch(client: httpx.AsyncClient)
     )
 
     assert response.status_code == 400
-    assert response.json() == {"detail": "File type not supported. Accepted: PDF, TXT"}
+    assert response.json() == {"detail": "File type not supported. Accepted: PDF, DOCX, XLSX, PPTX, TXT, CSV, MD, HTML, JSON, RTF"}
 
 
 @pytest.mark.asyncio

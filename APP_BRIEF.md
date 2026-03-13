@@ -113,7 +113,7 @@ The summary is a core part of the indexing strategy — not optional.
 User drops file
       │
       ▼
-Validate: MIME type AND file extension (.pdf / .txt only)
+Validate: MIME type AND file extension (.pdf / .docx / .xlsx / .pptx / .txt / .csv / .md / .html / .json / .rtf)
       │ fail → return 400 immediately
       ▼
 Check doc count < 200 (soft limit per project)
@@ -168,8 +168,8 @@ Every upload must pass **both** checks before processing begins:
 
 | Check | Allowed Values |
 |-------|---------------|
-| MIME type | `application/pdf`, `text/plain` |
-| File extension | `.pdf`, `.txt` |
+| MIME type | `application/pdf`, `text/plain`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`, `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`, `application/vnd.openxmlformats-officedocument.presentationml.presentation`, `text/csv`, `text/markdown`, `text/html`, `application/json`, `application/rtf` |
+| File extension | `.pdf`, `.txt`, `.docx`, `.xlsx`, `.pptx`, `.csv`, `.md`, `.html`, `.json`, `.rtf` |
 
 Reject if either check fails — return HTTP 400.
 Reject MIME/extension mismatches (e.g. a `.txt` file with PDF MIME type).
@@ -203,8 +203,8 @@ Reject MIME/extension mismatches (e.g. a `.txt` file with PDF MIME type).
 - Refresh button
 
 ### Page 2: Upload
-- Drag-and-drop file zone (PDF and TXT only — validate before upload)
-- Accepted: `.pdf`, `.txt`
+- Drag-and-drop file zone (all Google File Search supported formats)
+- Accepted: `.pdf`, `.docx`, `.xlsx`, `.pptx`, `.txt`, `.csv`, `.md`, `.html`, `.json`, `.rtf`
 - Rejected: show inline error for all other types
 - Progress indicator with multi-step status:
   - "Uploading..." → "Generating summary..." → "Indexing..." → "Done ✓"
@@ -228,7 +228,7 @@ Reject MIME/extension mismatches (e.g. a `.txt` file with PDF MIME type).
 | Auto-summary pipeline on every upload | Auth / RBAC |
 | Streamlit dev rig (HTTP calls only) | Next.js frontend |
 | `projects.json` for state | GCS / cloud storage |
-| PDF + TXT file support | DOCX / image file support |
+| PDF, DOCX, XLSX, PPTX, TXT, CSV, MD, HTML, JSON, RTF support | Image file support |
 | Multi-turn Q&A in session state | Persistent conversation history |
 | Grounding source display | Streaming responses |
 | Delete doc + delete project | Batch re-indexing |

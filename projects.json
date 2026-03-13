@@ -6,7 +6,7 @@
       "description": "This is for testing the rig",
       "store_id": "fileSearchStores/my-resume-gdj8nlz0m8k4",
       "created_at": "2026-03-09T08:17:59Z",
-      "doc_count": 2,
+      "doc_count": 6,
       "docs": {
         "5543b235-87a8-4bc8-ad31-b76714e48caf": {
           "id": "5543b235-87a8-4bc8-ad31-b76714e48caf",
@@ -32,6 +32,120 @@
           "summary_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/general-tony-stark-prompt-w-1vpz9dq46f3u",
           "status": "indexed",
           "uploaded_at": "2026-03-09T08:53:24Z",
+          "error": null
+        },
+        "8a0c34d7-8d9d-427e-9cf4-a413d9465347": {
+          "id": "8a0c34d7-8d9d-427e-9cf4-a413d9465347",
+          "project_id": "22c873e2-fb55-4d8f-b525-0a45d732fc4d",
+          "original_name": "tech_spec_cyberbugs.docx",
+          "display_name": "tech_spec_cyberbugs",
+          "file_size_bytes": 37824,
+          "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "store_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/techspeccyberbugs-u629rzen9rjk",
+          "summary_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/techspeccyberbugssummary-xk52f9t042b4",
+          "status": "indexed",
+          "uploaded_at": "2026-03-13T05:51:33Z",
+          "error": null
+        },
+        "1bec77c6-e743-4bb7-a9b1-5006fa49f180": {
+          "id": "1bec77c6-e743-4bb7-a9b1-5006fa49f180",
+          "project_id": "22c873e2-fb55-4d8f-b525-0a45d732fc4d",
+          "original_name": "meeting_brief_openbrain.docx",
+          "display_name": "meeting_brief_openbrain",
+          "file_size_bytes": 37734,
+          "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "store_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/meetingbriefopenbrain-nnp4q5z3vpch",
+          "summary_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/meetingbriefopenbrainsummar-fql0h2vrse15",
+          "status": "indexed",
+          "uploaded_at": "2026-03-13T05:52:05Z",
+          "error": null
+        },
+        "7c0870b5-05da-4145-a3d8-9644c878cc77": {
+          "id": "7c0870b5-05da-4145-a3d8-9644c878cc77",
+          "project_id": "22c873e2-fb55-4d8f-b525-0a45d732fc4d",
+          "original_name": "project_timeline_stark.docx",
+          "display_name": "project_timeline_stark",
+          "file_size_bytes": 37736,
+          "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "store_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/projecttimelinestark-q54njdytriec",
+          "summary_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/projecttimelinestarksummary-3p9nsyj2vbc4",
+          "status": "indexed",
+          "uploaded_at": "2026-03-13T05:52:34Z",
+          "error": null
+        },
+        "494ef50d-f06c-42ef-b830-a7e6b01f1b4e": {
+          "id": "494ef50d-f06c-42ef-b830-a7e6b01f1b4e",
+          "project_id": "22c873e2-fb55-4d8f-b525-0a45d732fc4d",
+          "original_name": "Moose_Resume.pdf",
+          "display_name": "Moose_Resume",
+          "file_size_bytes": 80455,
+          "mime_type": "application/pdf",
+          "store_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/mooseresume-6x3jh3wg6vm6",
+          "summary_doc_name": "fileSearchStores/my-resume-gdj8nlz0m8k4/documents/mooseresumesummary-vduociyrw59n",
+          "status": "indexed",
+          "uploaded_at": "2026-03-13T05:53:29Z",
+          "error": null
+        }
+      }
+    },
+    "4291f4eb-3fcf-4d05-aeef-e812cbba12cb": {
+      "id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+      "name": "Eval Test",
+      "description": "this is to test and implement our rag eval system",
+      "store_id": "fileSearchStores/eval-test-1znmzkshjg0f",
+      "created_at": "2026-03-12T11:56:02Z",
+      "doc_count": 4,
+      "docs": {
+        "4848c815-525f-4128-865f-6f31e6458546": {
+          "id": "4848c815-525f-4128-865f-6f31e6458546",
+          "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+          "original_name": "tech_spec_cyberbugs.docx",
+          "display_name": "tech_spec_cyberbugs",
+          "file_size_bytes": 37824,
+          "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "store_doc_name": "fileSearchStores/eval-test-1znmzkshjg0f/documents/techspeccyberbugs-j87bndruv0zf",
+          "summary_doc_name": "fileSearchStores/eval-test-1znmzkshjg0f/documents/techspeccyberbugssummary-alxznckhkcle",
+          "status": "indexed",
+          "uploaded_at": "2026-03-13T12:02:25Z",
+          "error": null
+        },
+        "00dd819d-b957-415b-ae38-fa8d8e790688": {
+          "id": "00dd819d-b957-415b-ae38-fa8d8e790688",
+          "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+          "original_name": "meeting_brief_openbrain.docx",
+          "display_name": "meeting_brief_openbrain",
+          "file_size_bytes": 37734,
+          "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "store_doc_name": "fileSearchStores/eval-test-1znmzkshjg0f/documents/meetingbriefopenbrain-cynsjd7wpeuj",
+          "summary_doc_name": "fileSearchStores/eval-test-1znmzkshjg0f/documents/meetingbriefopenbrainsummar-73dn5uirpizc",
+          "status": "indexed",
+          "uploaded_at": "2026-03-13T12:02:52Z",
+          "error": null
+        },
+        "a8a648f5-bc2c-4c66-bdef-4c3bfcc29a15": {
+          "id": "a8a648f5-bc2c-4c66-bdef-4c3bfcc29a15",
+          "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+          "original_name": "project_timeline_stark.docx",
+          "display_name": "project_timeline_stark",
+          "file_size_bytes": 37736,
+          "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "store_doc_name": "fileSearchStores/eval-test-1znmzkshjg0f/documents/projecttimelinestark-2x83sjzlfno8",
+          "summary_doc_name": "fileSearchStores/eval-test-1znmzkshjg0f/documents/projecttimelinestarksummary-kfsn3a5xrxjo",
+          "status": "indexed",
+          "uploaded_at": "2026-03-13T12:03:16Z",
+          "error": null
+        },
+        "14aa8c9f-5c24-4a36-8351-f3907ed8af03": {
+          "id": "14aa8c9f-5c24-4a36-8351-f3907ed8af03",
+          "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+          "original_name": "Moose_Resume.pdf",
+          "display_name": "Moose_Resume",
+          "file_size_bytes": 80455,
+          "mime_type": "application/pdf",
+          "store_doc_name": "fileSearchStores/eval-test-1znmzkshjg0f/documents/mooseresume-p0aa11udugwb",
+          "summary_doc_name": "fileSearchStores/eval-test-1znmzkshjg0f/documents/mooseresumesummary-e6d4slnnfgbr",
+          "status": "indexed",
+          "uploaded_at": "2026-03-13T12:03:44Z",
           "error": null
         }
       }

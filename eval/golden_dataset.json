@@ -1,0 +1,428 @@
+[
+  {
+    "id": "Q001",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What is Ahmed Musawir's current job title and employer?",
+    "ground_truth": "Ahmed Musawir is a Sr. React/Next.js/TS Full Stack Engineer (AI, Blockchain, CMS-s) at Cyberize Group, where he has worked since January 2019.",
+    "doc_source": "Moose_Resume.pdf",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "Moose_Resume.pdf"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q002",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "How many years of experience does Ahmed Musawir have in the U.S. IT industry?",
+    "ground_truth": "Ahmed Musawir has 16 years of solid experience in the U.S. IT industry.",
+    "doc_source": "Moose_Resume.pdf",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "Moose_Resume.pdf"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q003",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What blockchain project did Ahmed Musawir build at Cyberize Group?",
+    "ground_truth": "Ahmed Musawir built a Token Studio on the Polymesh Blockchain using a Next.js/TypeScript frontend and Strapi v4 backend for a client called Raze Finance Inc.",
+    "doc_source": "Moose_Resume.pdf",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "Moose_Resume.pdf"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q004",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "Where did Ahmed Musawir work before Cyberize Group?",
+    "ground_truth": "Before Cyberize Group, Ahmed Musawir worked at DeepCast.ai as a Frontend React Developer from November 2017 to December 2018.",
+    "doc_source": "Moose_Resume.pdf",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "Moose_Resume.pdf"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q005",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What enterprise company did Ahmed Musawir work at for over 8 years?",
+    "ground_truth": "Ahmed Musawir worked at AT&T as a Sr. Systems Analyst from February 2002 to July 2010, a period of 8 years and 6 months.",
+    "doc_source": "Moose_Resume.pdf",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "Moose_Resume.pdf"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q006",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What internal tool did Ahmed Musawir design and build at AT&T?",
+    "ground_truth": "Ahmed Musawir designed, developed, implemented, and supported two internal tools at AT&T: 'Zion', a web-based application management and monitoring system built with Perl, Korn shell, XML, and Oracle SQL; and 'Osiris', an on-demand web-based application management and monitoring tool built with LAMP, Korn Shell, XML, and Java.",
+    "doc_source": "Moose_Resume.pdf",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "Moose_Resume.pdf"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q007",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What are Ahmed Musawir's educational qualifications?",
+    "ground_truth": "Ahmed Musawir holds a Master of Business Administration (MBA) in Information Technology Project Management and a Bachelor of Commerce (B.Com.) in Computer Information Systems, both from San Francisco International University.",
+    "doc_source": "Moose_Resume.pdf",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "Moose_Resume.pdf"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q008",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What AI technologies has Ahmed Musawir worked with?",
+    "ground_truth": "Ahmed Musawir has performed R&D on AI-based products and applications using OpenAI, Python, LangChain, LangSmith, LangServe, FastAPI, Gemini, LLaMA 2, Claude, and HuggingFace.",
+    "doc_source": "Moose_Resume.pdf",
+    "query_type": "vague",
+    "expected_source_docs": [
+      "Moose_Resume.pdf"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": "Tests vague query \u2014 'AI technologies' not a direct heading in the doc"
+  },
+  {
+    "id": "Q009",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What is CyberBugs and what problem does it solve?",
+    "ground_truth": "CyberBugs is an internal bug tracking and project management tool built for Stark Industries. It replaces ClickUp for internal engineering teams.",
+    "doc_source": "tech_spec_cyberbugs.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "tech_spec_cyberbugs.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q010",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What tech stack is CyberBugs built with?",
+    "ground_truth": "CyberBugs is built with Next.js 15 App Router, Supabase as the database and auth layer, Tailwind CSS, and ShadCN components. State management uses Zustand exclusively.",
+    "doc_source": "tech_spec_cyberbugs.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "tech_spec_cyberbugs.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q011",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What state management libraries are forbidden in CyberBugs?",
+    "ground_truth": "Redux and Context API are forbidden in CyberBugs. Zustand is used exclusively for state management.",
+    "doc_source": "tech_spec_cyberbugs.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "tech_spec_cyberbugs.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q012",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What are the database tables in CyberBugs and their key fields?",
+    "ground_truth": "CyberBugs has 6 tables: users (id, email, role, created_at), projects (id, name, owner_id, status, created_at), tickets (id, project_id, title, description, status, priority, assignee_id, created_at), comments (id, ticket_id, author_id, body, created_at), tags (id, label, color), and ticket_tags (ticket_id, tag_id \u2014 a junction table).",
+    "doc_source": "tech_spec_cyberbugs.docx",
+    "query_type": "table",
+    "expected_source_docs": [
+      "tech_spec_cyberbugs.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": "Table extraction test \u2014 schema is in a structured table in the doc"
+  },
+  {
+    "id": "Q013",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What are the user roles in CyberBugs and what can each role do?",
+    "ground_truth": "CyberBugs has three roles: admin (can delete tickets), engineer (can create and update tickets), and viewer (read-only access). All permission checks happen in the service layer \u2014 no client-side auth checks are trusted.",
+    "doc_source": "tech_spec_cyberbugs.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "tech_spec_cyberbugs.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q014",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "Where should business logic live in CyberBugs API routes?",
+    "ground_truth": "No business logic is allowed inside route handler files. Route handlers only handle request parsing and response formatting. All service logic lives in /services/.",
+    "doc_source": "tech_spec_cyberbugs.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "tech_spec_cyberbugs.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q015",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "How should HTML content be rendered safely in CyberBugs frontend components?",
+    "ground_truth": "dangerouslySetInnerHTML is forbidden in CyberBugs. html-react-parser must be used instead.",
+    "doc_source": "tech_spec_cyberbugs.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "tech_spec_cyberbugs.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q016",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What is the core problem OpenBrain is solving?",
+    "ground_truth": "The core problem is vendor lock-in. Every time Tony switches AI platforms \u2014 Claude, ChatGPT, Gemini \u2014 he has to re-explain his entire context. OpenBrain is a personal knowledge base that travels with him across all platforms via an MCP server.",
+    "doc_source": "meeting_brief_openbrain.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "meeting_brief_openbrain.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q017",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What vector backend was chosen for OpenBrain and why was RAG Engine rejected?",
+    "ground_truth": "Vertex AI Search (Data Stores) was chosen as the vector backend for OpenBrain. The RAG Engine was not selected \u2014 the decision was made to use Vertex AI Search instead, with Rico Vega as the owner and a deadline of February 28, 2026.",
+    "doc_source": "meeting_brief_openbrain.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "meeting_brief_openbrain.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": "Doc does not state why RAG Engine was rejected \u2014 answer should reflect only what is in the doc"
+  },
+  {
+    "id": "Q018",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What decisions were made in the OpenBrain meeting on February 14, 2026?",
+    "ground_truth": "Five decisions were made: (1) Use Vertex AI Search as the vector backend (Rico, Feb 28); (2) Build a FastAPI wrapper on Cloud Run with API key auth (Rico, Feb 28); (3) Streamlit frontend for prototype testing only, not production (Maya, Feb 21); (4) BRAIN_MAP.json to be maintained manually until Phase 2 (Tony, ongoing); (5) Confidence threshold set at 0.7 \u2014 below this, return no answer (Rico, Feb 28).",
+    "doc_source": "meeting_brief_openbrain.docx",
+    "query_type": "table",
+    "expected_source_docs": [
+      "meeting_brief_openbrain.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": "Table extraction test \u2014 decisions are in a structured table"
+  },
+  {
+    "id": "Q019",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What was deferred or blocked in the OpenBrain meeting?",
+    "ground_truth": "Load-on-demand session management was deferred to Phase 2. Source badges in the UI were also deferred because Vertex does not reliably return line numbers. The MCP server build is blocked until the FastAPI wrapper is stable and tested.",
+    "doc_source": "meeting_brief_openbrain.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "meeting_brief_openbrain.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q020",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What is the next milestone for OpenBrain and who is responsible?",
+    "ground_truth": "The next milestone is a working RAG eval baseline using RAGAS. Tony will upload 4 test documents including his resume. Rico will run the RAGAS pipeline and produce a score table before any improvements are applied. Target date: March 7, 2026.",
+    "doc_source": "meeting_brief_openbrain.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "meeting_brief_openbrain.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q021",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "Who attended the OpenBrain meeting on February 14, 2026?",
+    "ground_truth": "The attendees were Tony Stark (Lead), Rico Vega (Backend), and Maya Chen (Frontend).",
+    "doc_source": "meeting_brief_openbrain.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "meeting_brief_openbrain.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q022",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What projects were completed in 2025 at Stark Industries?",
+    "ground_truth": "Five projects were completed in 2025: (1) ADK Harness Starter Kit \u2014 Token Calculator (Jan\u2013Feb 2025); (2) ADK Harness Starter Kit \u2014 Run Receipt (Feb\u2013Mar 2025); (3) ADK Harness \u2014 Context Cache Utility (Mar\u2013Apr 2025); (4) CyberBugs v0.1 \u2014 Auth + Ticket CRUD (May\u2013Aug 2025); (5) OpenBrain Prototype \u2014 Streamlit + FastAPI (Oct\u2013Dec 2025).",
+    "doc_source": "project_timeline_stark.docx",
+    "query_type": "table",
+    "expected_source_docs": [
+      "project_timeline_stark.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": "Table extraction test \u2014 completed projects are in a structured table"
+  },
+  {
+    "id": "Q023",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What is the Q1 2026 priority order for Stark Industries projects?",
+    "ground_truth": "Priority 1: Complete OpenBrain RAG eval baseline before any improvements are applied. Priority 2: Run accuracy improvement experiments (HyDE first, then Layout Parser, then Task Embeddings). Priority 3: Complete ADK Harness Phase 1A Rico agent with context caching. Priority 4: CyberBugs v1.0 ticket board feature complete. MCP server work does not begin until OpenBrain RAG accuracy is above 0.75 on all RAGAS metrics.",
+    "doc_source": "project_timeline_stark.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "project_timeline_stark.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q024",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What is the condition that must be met before MCP server work begins?",
+    "ground_truth": "MCP server work does not begin until OpenBrain RAG accuracy is above 0.75 on all RAGAS metrics.",
+    "doc_source": "project_timeline_stark.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "project_timeline_stark.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": "Precision test \u2014 specific threshold buried in priority section"
+  },
+  {
+    "id": "Q025",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "Who is the primary engineer for CyberBugs v1.0 and who handles ADK Harness Phase 1A?",
+    "ground_truth": "GPT Codex is the primary engineer for CyberBugs v1.0. Claude Code is the primary engineer for ADK Harness Phase 1A.",
+    "doc_source": "project_timeline_stark.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "project_timeline_stark.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q026",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What accuracy improvements are planned for OpenBrain after the RAG eval baseline?",
+    "ground_truth": "Three accuracy improvements are planned: HyDE (Hypothetical Document Embeddings), Layout Parser, and Task Embeddings. They are planned to run from March to April 2026.",
+    "doc_source": "project_timeline_stark.docx",
+    "query_type": "factual",
+    "expected_source_docs": [
+      "project_timeline_stark.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": ""
+  },
+  {
+    "id": "Q027",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "Who is responsible for the OpenBrain FastAPI backend and what is their deadline for the Vertex AI Search integration?",
+    "ground_truth": "Rico Vega is responsible for the OpenBrain FastAPI backend. His deadline for the Vertex AI Search integration was February 28, 2026, as decided in the February 14, 2026 meeting.",
+    "doc_source": "meeting_brief_openbrain.docx",
+    "query_type": "multi-hop",
+    "expected_source_docs": [
+      "meeting_brief_openbrain.docx",
+      "project_timeline_stark.docx"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": "Multi-hop: person + deadline requires connecting meeting brief and timeline"
+  },
+  {
+    "id": "Q028",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "Ahmed Musawir has experience with both enterprise systems and modern AI development. What enterprise companies did he work at and what AI frameworks has he used?",
+    "ground_truth": "Ahmed Musawir worked at HP (1997\u20131998), BellSouth Mobility DCS (1998\u20132000), AT&T (2002\u20132010), and DeepCast.ai (2017\u20132018) as enterprise employers. For AI development, he has used OpenAI, LangChain, LangSmith, LangServe, FastAPI, Gemini, LLaMA 2, Claude, and HuggingFace.",
+    "doc_source": "Moose_Resume.pdf",
+    "query_type": "multi-hop",
+    "expected_source_docs": [
+      "Moose_Resume.pdf"
+    ],
+    "expected_chunk_keywords": [],
+    "notes": "Multi-hop within single doc \u2014 requires connecting work history section with AI tech section"
+  },
+  {
+    "id": "Q029",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What is Ahmed Musawir's current salary?",
+    "ground_truth": "The documents do not contain this information.",
+    "doc_source": null,
+    "query_type": "negative",
+    "expected_source_docs": [],
+    "expected_chunk_keywords": [],
+    "notes": "Negative test — system should refuse to answer or say not found"
+  },
+  {
+    "id": "Q030",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What cloud provider hosts CyberBugs production infrastructure?",
+    "ground_truth": "The documents do not specify this.",
+    "doc_source": null,
+    "query_type": "negative",
+    "expected_source_docs": [],
+    "expected_chunk_keywords": [],
+    "notes": "Negative test — system should refuse to answer or say not found"
+  },
+  {
+    "id": "Q031",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "List all companies Ahmed Musawir worked at in chronological order.",
+    "ground_truth": "In chronological order: HP (1997\u20131998), BellSouth Mobility DCS (1998\u20132000), AT&T (2002\u20132010), DeepCast.ai (2017\u20132018), Cyberize Group (2019\u2013present).",
+    "doc_source": "Moose_Resume.pdf",
+    "query_type": "enumerative",
+    "expected_source_docs": [
+      "Moose_Resume.pdf"
+    ],
+    "expected_chunk_keywords": ["HP", "BellSouth", "AT&T", "DeepCast", "Cyberize"],
+    "notes": "Enumerative — requires retrieving and ordering all work history entries"
+  },
+  {
+    "id": "Q032",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What company did Ahmed Musawir work at immediately before AT&T?",
+    "ground_truth": "Ahmed Musawir worked at BellSouth Mobility DCS as a Systems Analyst from 1998 to 2000, immediately before his role at AT&T which began in February 2002.",
+    "doc_source": "Moose_Resume.pdf",
+    "query_type": "temporal",
+    "expected_source_docs": [
+      "Moose_Resume.pdf"
+    ],
+    "expected_chunk_keywords": ["BellSouth", "AT&T", "2000", "2002"],
+    "notes": "Temporal reasoning — tests ordering logic not simple lookup"
+  },
+  {
+    "id": "Q033",
+    "project_id": "4291f4eb-3fcf-4d05-aeef-e812cbba12cb",
+    "question": "What kind of architecture work is described in the OpenBrain documents?",
+    "ground_truth": "The OpenBrain documents describe a vendor-agnostic personal knowledge base architecture using Vertex AI Search as the vector backend, a FastAPI wrapper on Cloud Run, an MCP server for cross-platform context delivery, and a confidence threshold of 0.7 for retrieval quality control.",
+    "doc_source": "meeting_brief_openbrain.docx",
+    "query_type": "vague",
+    "expected_source_docs": [
+      "meeting_brief_openbrain.docx"
+    ],
+    "expected_chunk_keywords": ["Vertex AI Search", "MCP", "FastAPI", "confidence threshold"],
+    "notes": "Vague query — tests semantic retrieval, no direct keyword match"
+  }
+]
